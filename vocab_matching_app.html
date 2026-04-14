@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Vocab"/>
+<title>Vocab Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --g1:#ecf7e6;--g2:#d4eacc;--g3:#b8d9a8;--g4:#84a38d;--g5:#5c7a65;
+  --ff:'Nunito',sans-serif;--br:16px;--r:18px;
+}
+html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-family:var(--ff)}
+
+#shell{
+  display:flex;width:100%;
+  height:100dvh;
+  position:relative;overflow:hidden;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+
+/* drawer */
+#drawer{
+  position:absolute;top:0;left:0;height:100%;width:240px;
+  background:var(--g2);z-index:50;
+  transform:translateX(-100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  padding-top:calc(env(safe-area-inset-top,0px) + 60px);
+  padding-left:12px;padding-right:12px;padding-bottom:16px;
+  gap:5px;overflow-y:auto;overflow-x:hidden;
+}
+#drawer.open{transform:translateX(0)}
+#scrim{position:absolute;inset:0;background:rgba(0,0,0,.25);z-index:49;opacity:0;pointer-events:none;transition:opacity .28s}
+#scrim.on{opacity:1;pointer-events:auto}
+
+/* main */
+#main{flex:1;display:flex;flex-direction:column;background:var(--g1);min-width:0;width:100%;overflow:hidden}
+#topbar{display:flex;align-items:center;gap:10px;padding:12px 16px 10px;background:var(--g2);border-bottom:1.5px solid var(--g3);flex-shrink:0}
+#menu-btn{background:var(--g4);border:none;border-radius:12px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+#day-label{font-size:13px;font-weight:700;color:var(--g5);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#streak{font-size:13px;font-weight:700;color:var(--g5);flex-shrink:0}
+#content{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 8px;-webkit-overflow-scrolling:touch}
+
+/* sidebar elements */
+.sb-top{font-size:13px;font-weight:700;color:var(--g5);padding:0 4px 6px;display:flex;align-items:center;gap:6px}
+.sb-btn{background:transparent;border:1.5px solid var(--g3);border-radius:var(--br);padding:9px 10px;font-size:11px;color:var(--g5);cursor:pointer;transition:.15s;width:100%;font-family:var(--ff);font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
+.sb-btn:active{background:var(--g3)}
+.sb-btn.active{background:var(--g4);color:#fff;border-color:var(--g4)}
+.sb-label-row{display:flex;align-items:center;justify-content:space-between;margin:8px 2px 4px}
+.sb-label{font-size:9px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.08em}
+.add-week-btn{background:var(--g4);color:#fff;border:none;border-radius:10px;width:22px;height:22px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.week-block{display:flex;flex-direction:column;gap:3px}
+.week-swipe-wrap{position:relative;overflow:hidden;border-radius:var(--br)}
+.week-delete-bg{position:absolute;right:0;top:0;bottom:0;width:64px;background:#e07070;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;border-radius:var(--br);pointer-events:none}
+.week-header{position:relative;display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 10px;border-radius:var(--br);background:var(--g3);user-select:none;touch-action:pan-y;transition:background .15s,transform .2s ease}
+.week-header.open{background:var(--g4)}
+.week-header.open .week-label,.week-header.open .week-arrow{color:#fff}
+.week-label{font-size:12px;font-weight:700;color:var(--g5);flex:1}
+.week-arrow{font-size:10px;color:var(--g4);transition:transform .2s;line-height:1}
+.week-header.open .week-arrow{transform:rotate(90deg);color:#fff}
+.week-days{display:flex;flex-direction:column;gap:4px;padding-left:12px;overflow:hidden;transition:max-height .25s ease}
+.week-days.collapsed{max-height:0}
+.week-days.expanded{max-height:400px}
+.day-btn{background:transparent;border:1.5px solid var(--g3);border-radius:12px;padding:7px 10px;font-size:11px;color:var(--g5);cursor:pointer;transition:.15s;width:100%;font-family:var(--ff);font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
+.day-btn:active{background:var(--g3)}
+.day-btn.active{background:var(--g4);color:#fff;border-color:var(--g4)}
+.sb-footer{padding-top:10px;border-top:1.5px solid var(--g3);margin-top:auto}
+.how-to-btn{background:transparent;border:1.5px solid var(--g3);border-radius:var(--br);padding:9px 10px;font-size:12px;color:var(--g4);cursor:pointer;width:100%;font-family:var(--ff);font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.how-to-btn:active{background:var(--g3)}
+
+/* confirm */
+.confirm-overlay{background:rgba(92,122,101,.15);border-radius:16px;padding:14px;margin-top:4px}
+.confirm-overlay p{font-size:11px;color:var(--g5);font-weight:700;margin-bottom:8px;text-align:center}
+.confirm-overlay .btn-row{display:flex;gap:8px;justify-content:center}
+.del-btn{background:#e07070;color:#fff;border:none;border-radius:12px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer}
+.can-btn{background:var(--g2);color:var(--g5);border:none;border-radius:12px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer}
+
+/* content elements */
+.sec-title{font-size:16px;font-weight:800;color:var(--g5);text-align:center;margin-bottom:10px}
+.wc-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.wc-pill{background:var(--g3);color:var(--g5);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700}
+.input-row{display:flex;gap:8px;margin-bottom:10px}
+.inp{flex:1;background:#fff;border:1.5px solid var(--g3);border-radius:var(--br);padding:11px 12px;font-size:14px;color:var(--g5);outline:none;font-family:var(--ff);font-weight:600;text-align:center;min-width:0}
+.inp:focus{border-color:var(--g4)}
+.btn-add{background:var(--g4);color:#fff;border:none;border-radius:var(--br);padding:11px 16px;font-size:13px;cursor:pointer;font-weight:700;font-family:var(--ff);white-space:nowrap}
+.btn-add:active{background:var(--g5)}
+.word-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.word-tag{display:flex;align-items:center;background:var(--g2);border-radius:14px;padding:10px 14px;font-size:13px;color:var(--g5);font-weight:600}
+.word-tag span{flex:1;text-align:center}
+.word-tag .del{background:transparent;border:none;color:var(--g4);cursor:pointer;font-size:20px;padding:0 2px}
+.btn-start{background:var(--g4);color:#fff;border:none;border-radius:var(--br);padding:14px 32px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--ff)}
+.btn-start:active{background:var(--g5)}
+.btn-start:disabled{opacity:.38;cursor:not-allowed}
+.btn-ghost{background:var(--g2);color:var(--g5);border:none;border-radius:var(--br);padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--ff)}
+.btn-ghost:active{background:var(--g3)}
+.msg{font-size:13px;color:var(--g4);text-align:center;padding:24px;opacity:.7;font-weight:600}
+
+/* game */
+#content.game{overflow:hidden;display:flex;flex-direction:column;padding:12px 14px 8px}
+.info-bar{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:10px;flex-shrink:0}
+.badge{font-size:11px;font-weight:700;background:var(--g2);color:var(--g5);border-radius:20px;padding:5px 14px}
+.page-dot-row{display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-shrink:0}
+.page-dot{width:7px;height:7px;border-radius:50%;background:var(--g3)}
+.page-dot.active{background:var(--g4)}
+.match-layout{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0}
+.col-lbl{font-size:10px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;text-align:center;flex-shrink:0}
+.col-wrap{display:flex;flex-direction:column;min-height:0}
+.col-cards{display:flex;flex-direction:column;gap:6px;flex:1;min-height:0}
+.mcard{background:#fff;border:2px solid var(--g3);border-radius:var(--r);padding:4px 8px;font-size:12px;font-weight:600;color:var(--g5);cursor:pointer;transition:border-color .12s,background .12s,opacity .18s;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--ff);word-break:break-word;line-height:1.35;flex:1;min-height:0}
+.mcard:active:not(.matched):not(.wrong):not(.locked){border-color:var(--g4);background:var(--g2)}
+.mcard.selected{border-color:var(--g5);background:var(--g2);border-width:2.5px}
+.mcard.matched{opacity:.22;cursor:default;border-color:var(--g3);background:var(--g2)}
+.mcard.wrong{border-color:#d97272;background:#fff0f0;animation:shk .35s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* result */
+.result-box{background:var(--g2);border-radius:24px;padding:30px 24px;text-align:center;max-width:320px;margin:0 auto}
+.result-box h3{font-size:19px;font-weight:800;color:var(--g5);margin-bottom:8px}
+.result-box p{font-size:13px;color:var(--g4);margin-bottom:22px;font-weight:600;line-height:1.6}
+
+/* all words */
+.wf-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;justify-content:center}
+.wf-btn{background:var(--g2);border:1.5px solid var(--g3);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--g5);cursor:pointer;transition:.15s}
+.wf-btn:active{background:var(--g3)}
+.wf-btn.active{background:var(--g4);color:#fff;border-color:var(--g4)}
+.vtable{width:100%;border-collapse:collapse}
+.vtable th{font-size:11px;font-weight:700;color:var(--g4);text-align:center;padding:8px;border-bottom:1.5px solid var(--g3)}
+.vtable td{font-size:12px;font-weight:600;color:var(--g5);padding:9px 8px;border-bottom:1px solid var(--g2);text-align:center}
+.vtable tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:11px;font-weight:700;background:var(--g3);color:var(--g5);border-radius:20px;padding:2px 9px}
+
+/* onboarding */
+#onboarding{position:absolute;inset:0;background:rgba(92,122,101,.38);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.ob-card{background:#fff;border-radius:28px;width:100%;max-width:340px;padding:28px 22px 22px;display:flex;flex-direction:column;align-items:center}
+.ob-pic{display:flex;justify-content:center;margin-bottom:14px}
+.ob-text{font-size:13px;font-weight:600;color:var(--g5);text-align:center;line-height:1.75;margin-bottom:20px}
+.ob-text b{font-weight:800;color:var(--g4)}
+.ob-bottom{width:100%;display:flex;align-items:center;justify-content:space-between}
+.ob-dots{display:flex;gap:6px;align-items:center}
+.ob-dot{width:7px;height:7px;border-radius:50%;background:var(--g3);transition:.2s}
+.ob-dot.active{background:var(--g4);width:18px;border-radius:4px}
+#ob-skip-btn{font-size:11px;font-weight:700;color:var(--g4);background:none;border:none;cursor:pointer;min-width:36px;padding:4px}
+#ob-arrow-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<div id="shell">
+  <div id="scrim"></div>
+  <div id="drawer">
+    <div class="sb-top"><span style="font-size:18px">📚</span> Vocabulary</div>
+    <button class="sb-btn" id="btn-all"><span style="font-size:13px">📋</span> All Words</button>
+    <div class="sb-label-row">
+      <span class="sb-label">Study Days</span>
+      <button class="add-week-btn" id="add-week-btn">+</button>
+    </div>
+    <div id="week-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div class="sb-footer">
+      <button class="how-to-btn" id="how-to-btn">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#84a38d" stroke-width="1.8"/><path d="M6.2 6C6.2 4.95 7 4.2 8 4.2C9 4.2 9.8 4.95 9.8 6C9.8 6.8 9.3 7.5 8.6 7.85C8.25 8.03 8 8.38 8 8.75V9.5" stroke="#84a38d" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.8" fill="#84a38d"/></svg>
+        How to use
+      </button>
+    </div>
+  </div>
+  <div id="main">
+    <div id="topbar">
+      <button id="menu-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect x="2" y="4" width="14" height="2" rx="1" fill="#fff"/>
+          <rect x="2" y="8" width="14" height="2" rx="1" fill="#fff"/>
+          <rect x="2" y="12" width="14" height="2" rx="1" fill="#fff"/>
+        </svg>
+      </button>
+      <span id="day-label">Week 1 · Day 1</span>
+      <span id="streak">🔥 0 days</span>
+    </div>
+    <div id="content"></div>
+  </div>
+</div>
+<div id="onboarding" style="display:none">
+  <div class="ob-card">
+    <div class="ob-pic" id="ob-pic"></div>
+    <div class="ob-text" id="ob-text"></div>
+    <div class="ob-bottom">
+      <button id="ob-skip-btn">Skip</button>
+      <div class="ob-dots" id="ob-dots"></div>
+      <button id="ob-arrow-btn">
+        <svg id="ob-arrow-svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="16" stroke="#84a38d" stroke-width="2.5"/>
+          <path d="M14 10 L24 18 L14 26" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SK='vocab7d_v8';
+function load(){try{return JSON.parse(localStorage.getItem(SK))||null}catch{return null}}
+function save(s){try{localStorage.setItem(SK,JSON.stringify(s))}catch{}}
+const DAY_ICO={1:'✏️',2:'✏️',3:'✏️',4:'✏️',5:'✏️',6:'🔁',7:'⚡'};
+function makeWeek(idx){const days={};for(let d=1;d<=7;d++)days[d]=[];return{idx,days,wrongCounts:{}}}
+
+let state=load();
+if(!state)state={weeks:[makeWeek(1)],openWeeks:[1],curWeek:1,curDay:1,streak:0,lastDate:null,seenOnboarding:false};
+if(!state.weeks){const w=makeWeek(1);w.days=state.days||{};w.wrongCounts=state.wrongCounts||{};state={weeks:[w],openWeeks:[1],curWeek:1,curDay:1,streak:state.streak||0,lastDate:state.lastDate||null,seenOnboarding:false}}
+if(!state.openWeeks)state.openWeeks=[1];
+if(state.seenOnboarding===undefined)state.seenOnboarding=false;
+let curView='day',pendingDel=null,allFilter='all',obPage=0;
+
+/* ── DRAWER ── */
+function openDrawer(){
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('scrim').classList.add('on');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('scrim').classList.remove('on');
+}
+function toggleDrawer(){
+  document.getElementById('drawer').classList.contains('open')?closeDrawer():openDrawer();
+}
+
+/* ── ONBOARDING ── */
+const OB=[
+  {text:'이 어플은 효과적인 외국어 단어 암기를 위해\n<b>제작되었습니다.</b>\n\n총 <b>7일의 사이클</b>을 기준으로 진행됩니다.\n1일차 ~ 5일차는 새로운 단어 습득 중심,\n<b>6일차 · 7일차</b>는 복습 중심으로 진행됩니다.',
+   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="10" y="20" width="60" height="75" rx="8" stroke="#84a38d" stroke-width="3" fill="none"/><line x1="22" y1="38" x2="58" y2="38" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="50" x2="58" y2="50" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="62" x2="48" y2="62" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><rect x="28" y="10" width="60" height="75" rx="8" fill="#ecf7e6" stroke="#84a38d" stroke-width="2.2"/><line x1="40" y1="28" x2="76" y2="28" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="40" x2="76" y2="40" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="52" x2="65" y2="52" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><circle cx="128" cy="55" r="24" stroke="#84a38d" stroke-width="2.5" fill="none"/><path d="M128 35 L128 55 L142 55" stroke="#84a38d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="128" cy="55" r="3" fill="#84a38d"/><text x="116" y="92" font-family="Nunito,sans-serif" font-size="9" fill="#84a38d" font-weight="700">7-day cycle</text></svg>'},
+  {text:'단어와 뜻을 입력하고 <b>Add</b> 버튼을 눌러\n오늘의 단어들을 추가해주세요.\n\n단어를 추가했다면 <b>Start Matching</b> 버튼을\n눌러 단어 매칭 게임을 시작해주세요.',
+   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="8" y="15" width="144" height="30" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><rect x="14" y="21" width="55" height="18" rx="6" fill="#fff" stroke="#84a38d" stroke-width="1.5"/><rect x="76" y="21" width="46" height="18" rx="6" fill="#fff" stroke="#84a38d" stroke-width="1.5"/><rect x="127" y="21" width="19" height="18" rx="6" fill="#84a38d"/><text x="131" y="33" font-family="Nunito,sans-serif" font-size="9" fill="#fff" font-weight="700">+</text><text x="22" y="33" font-family="Nunito,sans-serif" font-size="8" fill="#84a38d" font-weight="600">apple</text><text x="82" y="33" font-family="Nunito,sans-serif" font-size="8" fill="#84a38d" font-weight="600">사과</text><rect x="8" y="52" width="144" height="18" rx="7" fill="#ecf7e6" stroke="#84a38d" stroke-width="1.5" stroke-dasharray="4 3"/><text x="50" y="65" font-family="Nunito,sans-serif" font-size="8.5" fill="#84a38d" font-weight="600">apple — 사과</text><rect x="30" y="80" width="100" height="22" rx="10" fill="#84a38d"/><text x="47" y="95" font-family="Nunito,sans-serif" font-size="9" fill="#fff" font-weight="700">▶ Start Matching</text></svg>'},
+  {text:'매칭 게임으로 단어를 암기합니다.\n단어는 <b>격일로 자동 믹스</b>됩니다.\n(예: Day 1 → Day 1 단어,\nDay 3 → Day 1 + Day 3 단어)\n\n오른쪽 상단에서 <b>연속 학습 일수</b>를 확인할 수 있습니다.',
+   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="8" y="8" width="68" height="42" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><rect x="84" y="8" width="68" height="42" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><text x="28" y="33" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">apple</text><text x="98" y="33" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">사과</text><defs><marker id="ar" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#84a38d"/></marker></defs><path d="M76 29 L84 29" stroke="#84a38d" stroke-width="2" stroke-linecap="round" marker-end="url(#ar)"/><rect x="8" y="58" width="68" height="42" rx="10" fill="#d4eacc" stroke="#84a38d" stroke-width="2"/><text x="22" y="83" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">beautiful</text><rect x="84" y="58" width="68" height="42" rx="10" fill="#d4eacc" stroke="#84a38d" stroke-width="2"/><text x="95" y="83" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">아름다운</text><path d="M76 79 L84 79" stroke="#84a38d" stroke-width="2" stroke-linecap="round" marker-end="url(#ar)"/></svg>'},
+  {text:'왼쪽 상단 <b>☰ 메뉴</b>를 눌러 주차와 학습일을 선택하고,\n<b>All Words</b>에서 지금까지 추가한\n모든 단어를 확인할 수 있습니다.',
+   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="8" y="8" width="48" height="94" rx="12" fill="#d4eacc" stroke="#84a38d" stroke-width="2"/><rect x="14" y="18" width="36" height="14" rx="7" fill="#84a38d"/><text x="19" y="28" font-family="Nunito,sans-serif" font-size="7.5" fill="#fff" font-weight="700">📋 All</text><rect x="14" y="36" width="36" height="13" rx="6" fill="#b8d9a8" stroke="#84a38d" stroke-width="1"/><text x="18" y="46" font-family="Nunito,sans-serif" font-size="7" fill="#5c7a65" font-weight="600">📅 Week 1</text><rect x="14" y="53" width="36" height="13" rx="6" fill="#b8d9a8" stroke="#84a38d" stroke-width="1"/><text x="18" y="63" font-family="Nunito,sans-serif" font-size="7" fill="#5c7a65" font-weight="600">📅 Week 2</text><rect x="64" y="8" width="88" height="94" rx="12" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><text x="72" y="22" font-family="Nunito,sans-serif" font-size="7" fill="#84a38d" font-weight="700">Word</text><text x="108" y="22" font-family="Nunito,sans-serif" font-size="7" fill="#84a38d" font-weight="700">Meaning</text><line x1="72" y1="26" x2="144" y2="26" stroke="#84a38d" stroke-width="1.5" stroke-linecap="round"/><text x="72" y="38" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">apple</text><text x="108" y="38" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">사과</text><text x="72" y="52" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">happy</text><text x="108" y="52" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">행복한</text></svg>'},
+  {final:true, text:'',
+   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><path d="M80 95C80 95 20 65 20 38C20 24 32 14 45 14C57 14 67 22 80 34C93 22 103 14 115 14C128 14 140 24 140 38C140 65 80 95 80 95Z" fill="#84a38d" opacity=".18"/><path d="M80 88C80 88 25 61 25 38C25 27 35 18 47 18C58 18 68 26 80 38C92 26 102 18 113 18C125 18 135 27 135 38C135 61 80 88 80 88Z" fill="#84a38d" opacity=".35"/><path d="M80 82C80 82 30 57 30 38C30 29 39 22 49 22C60 22 70 30 80 42C90 30 100 22 111 22C121 22 130 29 130 38C130 57 80 82 80 82Z" fill="#84a38d"/></svg>'}
+];
+
+function renderOB(){
+  const p=OB[obPage];
+  const total=OB.length;
+  const isLast=obPage===total-1;
+  document.getElementById('ob-pic').innerHTML=p.svg;
+  if(p.final){
+    document.getElementById('ob-text').innerHTML='';
+    document.getElementById('ob-text').style.cssText='font-size:16px;font-weight:800;color:#84a38d;line-height:2;text-align:center;margin-bottom:20px';
+    document.getElementById('ob-text').innerHTML='그럼 오늘부터 열심히<br>어휘 공부를 시작해주세요!';
+  }else{
+    document.getElementById('ob-text').style.cssText='';
+    document.getElementById('ob-text').innerHTML=p.text.replace(/\n/g,'<br>');
+  }
+  const dotsEl=document.getElementById('ob-dots');
+  dotsEl.innerHTML=Array.from({length:total},(_,i)=>`<div class="ob-dot${i===obPage?' active':''}"></div>`).join('');
+  document.getElementById('ob-skip-btn').textContent=isLast?'':' Skip';
+  const svg=document.getElementById('ob-arrow-svg');
+  if(isLast){
+    svg.innerHTML='<rect width="36" height="36" rx="18" fill="#84a38d"/><path d="M14 10 L24 18 L14 26" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+  }else{
+    svg.innerHTML='<circle cx="18" cy="18" r="16" stroke="#84a38d" stroke-width="2.5"/><path d="M14 10 L24 18 L14 26" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  document.getElementById('ob-arrow-btn').onclick=isLast?closeOB:obNext;
+  document.getElementById('ob-skip-btn').onclick=closeOB;
+}
+function obNext(){if(obPage<OB.length-1){obPage++;renderOB()}}
+function openOnboarding(){obPage=0;renderOB();document.getElementById('onboarding').style.display='flex'}
+function closeOB(){document.getElementById('onboarding').style.display='none';state.seenOnboarding=true;save(state)}
+
+/* ── CYCLE ── */
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function initCycle(){
+  const t=todayStr();
+  if(state.lastDate!==t){
+    if(state.lastDate){const d=Math.floor((new Date(t)-new Date(state.lastDate))/86400000);state.streak=d===1?state.streak+1:1}
+    else state.streak=1;
+    state.lastDate=t;
+  }
+  save(state);
+  if(!state.seenOnboarding)openOnboarding();
+  render();
+}
+
+/* ── WEEK MANAGEMENT ── */
+function addWeek(){
+  const idx=state.weeks.length?Math.max(...state.weeks.map(w=>w.idx))+1:1;
+  state.weeks.push(makeWeek(idx));
+  if(!state.openWeeks.includes(idx))state.openWeeks.push(idx);
+  save(state);renderSidebar();
+}
+function toggleWeek(idx){
+  const i=state.openWeeks.indexOf(idx);
+  if(i>=0)state.openWeeks.splice(i,1);else state.openWeeks.push(idx);
+  save(state);renderSidebar();
+}
+function confirmDel(idx){pendingDel=idx;renderSidebar()}
+function cancelDel(){pendingDel=null;renderSidebar()}
+function doDelete(idx){
+  state.weeks=state.weeks.filter(w=>w.idx!==idx);
+  state.openWeeks=state.openWeeks.filter(i=>i!==idx);
+  if(state.curWeek===idx&&state.weeks.length){state.curWeek=state.weeks[0].idx;state.curDay=1}
+  pendingDel=null;save(state);
+  if(curView==='day')showDay(state.curWeek,state.curDay);
+  renderSidebar();
+}
+
+function setupSwipe(el,idx){
+  let sx=0,cx=0,going=false;
+  const T=50;
+  const s=e=>{sx=e.touches?e.touches[0].clientX:e.clientX;going=true;cx=0};
+  const m=e=>{if(!going)return;const x=(e.touches?e.touches[0].clientX:e.clientX)-sx;if(x<0){cx=Math.max(x,-72);el.style.transform=`translateX(${cx}px)`}};
+  const u=()=>{if(!going)return;going=false;if(cx<=-T){el.style.transform='';confirmDel(idx)}else{el.style.transform='';cx=0}};
+  el.addEventListener('touchstart',s,{passive:true});
+  el.addEventListener('touchmove',m,{passive:true});
+  el.addEventListener('touchend',u);
+  el.addEventListener('mousedown',s);
+  document.addEventListener('mousemove',m);
+  document.addEventListener('mouseup',u);
+}
+
+/* ── RENDER ── */
+function render(){
+  document.getElementById('streak').textContent='🔥 '+state.streak+' days';
+  renderSidebar();
+  if(curView==='all')showAll();else showDay(state.curWeek,state.curDay);
+}
+
+function renderSidebar(){
+  const wl=document.getElementById('week-list');wl.innerHTML='';
+  state.weeks.forEach(week=>{
+    const wi=week.idx,open=state.openWeeks.includes(wi),isPend=pendingDel===wi;
+    const block=document.createElement('div');block.className='week-block';
+    const sw=document.createElement('div');sw.className='week-swipe-wrap';
+    const bg=document.createElement('div');bg.className='week-delete-bg';bg.textContent='Delete';
+    const hdr=document.createElement('div');hdr.className='week-header'+(open?' open':'');
+    hdr.innerHTML=`<span style="font-size:14px">📅</span><span class="week-label">Week ${wi}</span><span class="week-arrow">▶</span>`;
+    hdr.addEventListener('click',e=>{if(Math.abs(parseFloat(hdr.style.transform||'0'))>5)return;toggleWeek(wi)});
+    sw.appendChild(bg);sw.appendChild(hdr);block.appendChild(sw);
+    if(isPend){
+      const c=document.createElement('div');c.className='confirm-overlay';
+      const cp=document.createElement('p');cp.textContent=`Delete Week ${wi}? 🗑️`;
+      const cr=document.createElement('div');cr.className='btn-row';
+      const db=document.createElement('button');db.className='del-btn';db.textContent='Delete';
+      db.addEventListener('click',()=>doDelete(wi));
+      const cb=document.createElement('button');cb.className='can-btn';cb.textContent='Cancel';
+      cb.addEventListener('click',cancelDel);
+      cr.appendChild(db);cr.appendChild(cb);c.appendChild(cp);c.appendChild(cr);block.appendChild(c);
+    }
+    const dd=document.createElement('div');dd.className='week-days '+(open?'expanded':'collapsed');
+    for(let d=1;d<=7;d++){
+      const b=document.createElement('button');
+      b.className='day-btn'+(state.curWeek===wi&&state.curDay===d&&curView==='day'?' active':'');
+      b.innerHTML=`<span style="font-size:13px">${DAY_ICO[d]}</span> Day ${d}`;
+      b.addEventListener('click',(()=>{const ww=wi,dd2=d;return()=>{curView='day';document.getElementById('btn-all').classList.remove('active');state.curWeek=ww;state.curDay=dd2;save(state);closeDrawer();renderSidebar();showDay(ww,dd2)}})());
+      dd.appendChild(b);
+    }
+    block.appendChild(dd);wl.appendChild(block);setupSwipe(hdr,wi);
+  });
+}
+
+/* ── CONTENT HELPERS ── */
+function setScrollable(){
+  const c=document.getElementById('content');
+  c.className='';c.style.cssText='flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 8px;-webkit-overflow-scrolling:touch';
+}
+function setGame(){
+  const c=document.getElementById('content');
+  c.className='game';c.style.cssText='';
+}
+
+/* ── ALL WORDS ── */
+function showAll(){
+  curView='all';
+  document.getElementById('btn-all').classList.add('active');
+  document.getElementById('day-label').textContent='All Words';
+  setScrollable();
+  const c=document.getElementById('content');c.innerHTML='';
+  const title=document.createElement('div');title.className='sec-title';title.textContent='📋 All Words';c.appendChild(title);
+  const bar=document.createElement('div');bar.className='wf-bar';
+  const allBtn=document.createElement('button');allBtn.className='wf-btn'+(allFilter==='all'?' active':'');allBtn.textContent='All';
+  allBtn.addEventListener('click',()=>setFilter('all'));bar.appendChild(allBtn);
+  state.weeks.forEach(w=>{
+    const wb=document.createElement('button');wb.className='wf-btn'+(allFilter===w.idx?' active':'');wb.textContent=`Week ${w.idx}`;
+    wb.addEventListener('click',()=>setFilter(w.idx));bar.appendChild(wb);
+  });
+  c.appendChild(bar);
+  const all=[];state.weeks.forEach(w=>{for(let d=1;d<=5;d++)(w.days[d]||[]).forEach(x=>all.push({...x,week:w.idx,day:d}))});
+  const fil=allFilter==='all'?all:all.filter(x=>x.week===allFilter);
+  if(!fil.length){const m=document.createElement('p');m.className='msg';m.textContent='No words saved yet.';c.appendChild(m);return}
+  const tbl=document.createElement('table');tbl.className='vtable';
+  tbl.innerHTML='<thead><tr><th>Word</th><th>Meaning</th><th>Week</th><th>Day</th><th>Errors</th></tr></thead>';
+  const tbody=document.createElement('tbody');
+  fil.forEach(w=>{const wk=state.weeks.find(x=>x.idx===w.week);const wc=wk?wk.wrongCounts[w.word]||0:0;const tr=document.createElement('tr');tr.innerHTML=`<td>${w.word}</td><td>${w.meaning}</td><td><span class="pill">W${w.week}</span></td><td><span class="pill">D${w.day}</span></td><td>${wc>0?'❌'.repeat(Math.min(wc,3)):'-'}</td>`;tbody.appendChild(tr)});
+  tbl.appendChild(tbody);c.appendChild(tbl);
+}
+function setFilter(v){allFilter=v;showAll()}
+
+/* ── SHOW DAY ── */
+function getWeek(idx){return state.weeks.find(w=>w.idx===idx)}
+function showDay(wIdx,d){
+  if(!wIdx||!getWeek(wIdx)){if(state.weeks.length){wIdx=state.weeks[0].idx;d=1}else{setScrollable();document.getElementById('content').innerHTML='<p class="msg">Add a week to get started!</p>';return}}
+  state.curWeek=wIdx;state.curDay=d;save(state);
+  document.getElementById('day-label').textContent=`Week ${wIdx} · Day ${d}`+(d<=5?' · Input':d===6?' · Review':' · Hard');
+  setScrollable();
+  const week=getWeek(wIdx);if(!week)return;
+  if(d<=5)renderInputDay(week,d);else if(d===6)renderSummaryDay(week);else renderHardDay(week);
+}
+function getPool(week,d){
+  if(d<=2)return[...(week.days[d]||[])];
+  if(d===3)return[...(week.days[3]||[]),...(week.days[1]||[])];
+  if(d===4)return[...(week.days[4]||[]),...(week.days[2]||[])];
+  return[...(week.days[5]||[]),...(week.days[3]||[])];
+}
+
+/* ── INPUT DAY ── */
+function renderInputDay(week,d){
+  const pool=getPool(week,d);const tc=(week.days[d]||[]).length;const pc=pool.length;
+  const c=document.getElementById('content');c.innerHTML='';
+  const title=document.createElement('div');title.className='sec-title';title.textContent=`✏️ Week ${week.idx} · Day ${d}`;c.appendChild(title);
+  const wcBar=document.createElement('div');wcBar.className='wc-bar';wcBar.id='wc-bar';
+  const p1=document.createElement('span');p1.className='wc-pill';p1.textContent=`📝 Today: ${tc} word${tc!==1?'s':''}`;wcBar.appendChild(p1);
+  if(pc!==tc){const p2=document.createElement('span');p2.className='wc-pill';p2.textContent=`🎮 In game: ${pc}`;wcBar.appendChild(p2)}
+  c.appendChild(wcBar);
+  const row=document.createElement('div');row.className='input-row';
+  const iw=document.createElement('input');iw.className='inp';iw.id='iw';iw.placeholder='Word';
+  const im=document.createElement('input');im.className='inp';im.id='im';im.placeholder='Meaning';
+  const addBtn=document.createElement('button');addBtn.className='btn-add';addBtn.textContent='+ Add';
+  addBtn.addEventListener('click',()=>addWord(week.idx,d));
+  iw.addEventListener('keydown',e=>{if(e.key==='Enter')im.focus()});
+  im.addEventListener('keydown',e=>{if(e.key==='Enter')addWord(week.idx,d)});
+  row.appendChild(iw);row.appendChild(im);row.appendChild(addBtn);c.appendChild(row);
+  const wl=document.createElement('div');wl.className='word-list';wl.id='wlist';c.appendChild(wl);
+  const btnWrap=document.createElement('div');btnWrap.style.textAlign='center';btnWrap.style.paddingBottom='12px';
+  const startBtn=document.createElement('button');startBtn.className='btn-start';startBtn.id='btn-game';startBtn.textContent='▶ Start Matching';startBtn.disabled=pool.length<2;
+  startBtn.addEventListener('click',()=>startGame(week.idx,d));
+  btnWrap.appendChild(startBtn);c.appendChild(btnWrap);
+  renderWordList(week,d);
+}
+
+function renderWordList(week,d){
+  const wl=document.getElementById('wlist');if(!wl)return;
+  wl.innerHTML='';
+  const words=week.days[d]||[];
+  if(!words.length){const m=document.createElement('div');m.style.cssText='font-size:13px;color:var(--g4);padding:4px;opacity:.6;text-align:center;font-weight:600';m.textContent='Add words above 🌱';wl.appendChild(m);return}
+  words.forEach((w,i)=>{
+    const tag=document.createElement('div');tag.className='word-tag';
+    const sp=document.createElement('span');sp.textContent=`${w.word} — ${w.meaning}`;
+    const del=document.createElement('button');del.className='del';del.textContent='×';
+    del.addEventListener('click',()=>delWord(week.idx,d,i));
+    tag.appendChild(sp);tag.appendChild(del);wl.appendChild(tag);
+  });
+  const pool=getPool(week,d);
+  const gb=document.getElementById('btn-game');if(gb)gb.disabled=pool.length<2;
+  const tc=words.length,pc=pool.length;
+  const bar=document.getElementById('wc-bar');
+  if(bar){bar.innerHTML='';const p1=document.createElement('span');p1.className='wc-pill';p1.textContent=`📝 Today: ${tc} word${tc!==1?'s':''}`;bar.appendChild(p1);if(pc!==tc){const p2=document.createElement('span');p2.className='wc-pill';p2.textContent=`🎮 In game: ${pc}`;bar.appendChild(p2)}}
+}
+
+function addWord(wIdx,d){
+  const we=document.getElementById('iw'),me=document.getElementById('im');
+  const w=we.value.trim(),m=me.value.trim();if(!w||!m)return;
+  const week=getWeek(wIdx);if(!week)return;
+  week.days[d].push({word:w,meaning:m});save(state);we.value='';me.value='';we.focus();renderWordList(week,d);
+}
+function delWord(wIdx,d,i){const w=getWeek(wIdx);if(!w)return;w.days[d].splice(i,1);save(state);renderWordList(w,d)}
+
+/* ── SUMMARY / HARD ── */
+function renderSummaryDay(week){
+  const all=[];for(let d=1;d<=5;d++)(week.days[d]||[]).forEach(w=>all.push(w));
+  const c=document.getElementById('content');c.innerHTML='';
+  const t=document.createElement('div');t.className='sec-title';t.textContent=`🔁 Week ${week.idx} · Day 6`;c.appendChild(t);
+  const p=document.createElement('p');p.style.cssText='font-size:13px;color:var(--g4);margin-bottom:24px;text-align:center;font-weight:600';p.textContent='All words from Days 1–5, shuffled.';c.appendChild(p);
+  const w=document.createElement('div');w.style.textAlign='center';
+  const b=document.createElement('button');b.className='btn-start';b.disabled=all.length<2;b.textContent='▶ Start Matching';
+  b.addEventListener('click',()=>launchGame(week.idx,all,6));
+  w.appendChild(b);c.appendChild(w);
+  if(all.length<2){const m=document.createElement('p');m.className='msg';m.textContent='Need at least 2 words.';c.appendChild(m)}
+}
+
+function renderHardDay(week){
+  const all=[];for(let d=1;d<=5;d++)(week.days[d]||[]).forEach(w=>all.push(w));
+  const sorted=[...all].sort((a,b)=>(week.wrongCounts[b.word]||0)-(week.wrongCounts[a.word]||0));
+  const hard=sorted.slice(0,Math.max(4,Math.ceil(sorted.length*.5)));
+  const c=document.getElementById('content');c.innerHTML='';
+  const t=document.createElement('div');t.className='sec-title';t.textContent=`⚡ Week ${week.idx} · Day 7`;c.appendChild(t);
+  const p=document.createElement('p');p.style.cssText='font-size:13px;color:var(--g4);margin-bottom:24px;text-align:center;font-weight:600';p.textContent=`Your ${hard.length} most-missed words. 💪`;c.appendChild(p);
+  const w=document.createElement('div');w.style.textAlign='center';
+  const b=document.createElement('button');b.className='btn-start';b.disabled=hard.length<2;b.textContent='▶ Start Matching';
+  b.addEventListener('click',()=>launchGame(week.idx,hard,7));
+  w.appendChild(b);c.appendChild(w);
+  if(hard.length<2){const m=document.createElement('p');m.className='msg';m.textContent='Not enough error data yet.';c.appendChild(m)}
+}
+
+/* ── GAME ── */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function startGame(wIdx,d){const w=getWeek(wIdx);if(!w)return;launchGame(wIdx,getPool(w,d),d)}
+function launchGame(wIdx,pool,day){
+  const shuffled=shuffle([...pool]);const pages=[];
+  for(let i=0;i<shuffled.length;i+=8)pages.push(shuffled.slice(i,i+8));
+  runSession(wIdx,pages,day);
+}
+function runSession(wIdx,pages,day){
+  const allWrong=[];let pi=0;
+  function next(){
+    if(pi<pages.length){
+      playPage(wIdx,pages[pi],day,pi,pages.length,false,(wl)=>{
+        wl.forEach(x=>{if(!allWrong.find(a=>a.word===x.word))allWrong.push(x)});
+        pi++;next();
+      });
+    }else{
+      if(allWrong.length>=2)showRetryScreen(wIdx,allWrong,day);
+      else showFinal(wIdx,day,allWrong.length===0);
+    }
+  }
+  next();
+}
+
+function showRetryScreen(wIdx,wrongWords,day){
+  setScrollable();
+  const c=document.getElementById('content');c.innerHTML='';
+  const wrap=document.createElement('div');wrap.style.cssText='display:flex;align-items:center;justify-content:center;padding:40px 0';
+  const box=document.createElement('div');box.className='result-box';
+  box.innerHTML=`<div style="font-size:44px;margin-bottom:12px">🔁</div><h3>Review time!</h3><p>You missed <b>${wrongWords.length}</b> word${wrongWords.length>1?'s':''}.<br>Let&#39;s go once more!</p>`;
+  const btnRow=document.createElement('div');btnRow.style.cssText='display:flex;gap:10px;justify-content:center';
+  const rb=document.createElement('button');rb.className='btn-start';rb.textContent='▶ Retry Missed';rb.addEventListener('click',()=>startRetry(wIdx,wrongWords,day));
+  const bb=document.createElement('button');bb.className='btn-ghost';bb.textContent='← Back';bb.addEventListener('click',()=>showDay(wIdx,day));
+  btnRow.appendChild(rb);btnRow.appendChild(bb);box.appendChild(btnRow);wrap.appendChild(box);c.appendChild(wrap);
+}
+
+function startRetry(wIdx,words,day){
+  const shuffled=shuffle([...words]);const pages=[];
+  for(let i=0;i<shuffled.length;i+=8)pages.push(shuffled.slice(i,i+8));
+  let pi=0;
+  function next(){if(pi<pages.length){playPage(wIdx,pages[pi],day,pi,pages.length,true,()=>{pi++;next()})}else showFinal(wIdx,day,false)}
+  next();
+}
+
+function showFinal(wIdx,day,perfect){
+  setScrollable();
+  const c=document.getElementById('content');c.innerHTML='';
+  const wrap=document.createElement('div');wrap.style.cssText='display:flex;align-items:center;justify-content:center;padding:40px 0';
+  const box=document.createElement('div');box.className='result-box';
+  box.innerHTML=`<div style="font-size:52px;margin-bottom:12px">${perfect?'🎉':'✨'}</div><h3>${perfect?'Perfect!':'Great work!'}</h3><p>${perfect?'Zero mistakes! 🌟':'All done.'}</p>`;
+  const btnRow=document.createElement('div');btnRow.style.cssText='display:flex;gap:10px;justify-content:center';
+  const ab=document.createElement('button');ab.className='btn-start';ab.textContent='↩ Again';ab.addEventListener('click',()=>startGame(wIdx,day));
+  const bb=document.createElement('button');bb.className='btn-ghost';bb.textContent='← Back';bb.addEventListener('click',()=>showDay(wIdx,day));
+  btnRow.appendChild(ab);btnRow.appendChild(bb);box.appendChild(btnRow);wrap.appendChild(box);c.appendChild(wrap);
+}
+
+function playPage(wIdx,pairs,day,pageIdx,totalPages,isRetry,onDone){
+  setGame();
+  const content=document.getElementById('content');content.innerHTML='';
+  const week=getWeek(wIdx);
+  let matched=new Set(),tries=0,wrong=0,locked=false,selWord=null,selMean=null;
+  const pageWrong=[];
+  const wCards=shuffle(pairs.map((p,i)=>({...p,idx:i})));
+  const mCards=shuffle(pairs.map((p,i)=>({...p,idx:i})));
+  const n=pairs.length;
+
+  function renderGame(){
+    content.innerHTML='';
+    const dotRow=document.createElement('div');dotRow.className='page-dot-row';
+    for(let i=0;i<totalPages;i++){const d=document.createElement('div');d.className='page-dot'+(i===pageIdx?' active':'');dotRow.appendChild(d)}
+    content.appendChild(dotRow);
+    const infoBar=document.createElement('div');infoBar.className='info-bar';
+    const b1=document.createElement('div');b1.className='badge';b1.textContent=(isRetry?'🔁 · ':'')+`✅ ${matched.size}/${n}`;
+    const b2=document.createElement('div');b2.className='badge';b2.textContent=`🎯 ${tries}`;
+    const b3=document.createElement('div');b3.className='badge';b3.textContent=`❌ ${wrong}`;
+    infoBar.appendChild(b1);infoBar.appendChild(b2);infoBar.appendChild(b3);content.appendChild(infoBar);
+    const layout=document.createElement('div');layout.className='match-layout';
+    [wCards,mCards].forEach((cards,ci)=>{
+      const wrap=document.createElement('div');wrap.className='col-wrap';
+      const lbl=document.createElement('div');lbl.className='col-lbl';lbl.textContent=ci===0?'Words':'Meanings';
+      const col=document.createElement('div');col.className='col-cards';
+      cards.forEach(p=>{
+        const div=document.createElement('div');
+        const isSel=ci===0?(selWord&&selWord.idx===p.idx):(selMean&&selMean.idx===p.idx);
+        div.className='mcard'+(matched.has(p.idx)?' matched':'')+(isSel?' selected':'')+(locked?' locked':'');
+        div.dataset.idx=p.idx;div.textContent=ci===0?p.word:p.meaning;
+        if(!matched.has(p.idx)&&!locked){
+          div.addEventListener('click',()=>ci===0?clickWord(p):clickMean(p));
+        }
+        col.appendChild(div);
+      });
+      wrap.appendChild(lbl);wrap.appendChild(col);layout.appendChild(wrap);
+    });
+    content.appendChild(layout);
+  }
+
+  function clickWord(p){if(locked||matched.has(p.idx))return;selWord=p;renderGame();if(selMean)check()}
+  function clickMean(p){if(locked||matched.has(p.idx))return;selMean=p;renderGame();if(selWord)check()}
+  function check(){
+    tries++;
+    if(selWord.idx===selMean.idx){
+      matched.add(selWord.idx);selWord=null;selMean=null;renderGame();
+      if(matched.size===n)setTimeout(()=>onDone(pageWrong),300);
+    }else{
+      wrong++;
+      const wo=selWord,mo=selMean;
+      if(!pageWrong.find(x=>x.word===wo.word))pageWrong.push({word:wo.word,meaning:wo.meaning});
+      if(week&&wo.word)week.wrongCounts[wo.word]=(week.wrongCounts[wo.word]||0)+1;
+      save(state);locked=true;renderGame();
+      const wE=document.querySelector(`#content .match-layout .col-wrap:first-child .mcard[data-idx="${wo.idx}"]`);
+      const mE=document.querySelector(`#content .match-layout .col-wrap:last-child .mcard[data-idx="${mo.idx}"]`);
+      if(wE)wE.classList.add('wrong');if(mE)mE.classList.add('wrong');
+      setTimeout(()=>{locked=false;selWord=null;selMean=null;renderGame()},700);
+    }
+  }
+  renderGame();
+}
+
+/* ── BOOT ── */
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('menu-btn').addEventListener('click',toggleDrawer);
+  document.getElementById('scrim').addEventListener('click',closeDrawer);
+  document.getElementById('btn-all').addEventListener('click',function(){showAll();closeDrawer()});
+  document.getElementById('add-week-btn').addEventListener('click',addWeek);
+  document.getElementById('how-to-btn').addEventListener('click',function(){openOnboarding();closeDrawer()});
+  initCycle();
+});
+</script>
+</body>
+</html>
