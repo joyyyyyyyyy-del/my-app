@@ -33,7 +33,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-famil
   display:flex;flex-direction:column;
   padding-top:calc(env(safe-area-inset-top,0px) + 60px);
   padding-left:12px;padding-right:12px;padding-bottom:16px;
-  gap:5px;overflow-y:auto;overflow-x:hidden;
+  gap:5px;overflow:hidden;
 }
 #drawer.open{transform:translateX(0)}
 #scrim{position:absolute;inset:0;background:rgba(0,0,0,.25);z-index:49;opacity:0;pointer-events:none;transition:opacity .28s}
@@ -70,7 +70,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-famil
 .day-btn{background:transparent;border:1.5px solid var(--g3);border-radius:12px;padding:7px 10px;font-size:11px;color:var(--g5);cursor:pointer;transition:.15s;width:100%;font-family:var(--ff);font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
 .day-btn:active{background:var(--g3)}
 .day-btn.active{background:var(--g4);color:#fff;border-color:var(--g4)}
-.sb-footer{padding-top:10px;border-top:1.5px solid var(--g3);margin-top:auto}
+.sb-footer{padding-top:10px;border-top:1.5px solid var(--g3);flex-shrink:0}
 .how-to-btn{background:transparent;border:1.5px solid var(--g3);border-radius:var(--br);padding:9px 10px;font-size:12px;color:var(--g4);cursor:pointer;width:100%;font-family:var(--ff);font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
 .how-to-btn:active{background:var(--g3)}
 
@@ -147,6 +147,90 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-famil
 .ob-dot.active{background:var(--g4);width:18px;border-radius:4px}
 #ob-skip-btn{font-size:11px;font-weight:700;color:var(--g4);background:none;border:none;cursor:pointer;min-width:36px;padding:4px}
 #ob-arrow-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center}
+.ob-lang-bar{display:flex;gap:6px;justify-content:center;margin-bottom:10px;width:100%}
+.ob-lang-btn{background:transparent;border:1.5px solid var(--g3);border-radius:20px;padding:4px 13px;font-size:11px;font-weight:700;color:var(--g4);cursor:pointer;font-family:var(--ff);transition:.15s}
+.ob-lang-btn:active{background:var(--g2)}
+.ob-lang-btn.active{background:var(--g4);color:#fff;border-color:var(--g4)}
+.ob-tag{display:inline-flex;align-items:center;gap:5px;background:var(--g4);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;color:#fff;margin-bottom:10px;font-family:var(--ff)}
+.ob-title{font-size:11px;font-weight:700;color:var(--g4);margin:0 0 10px;font-family:var(--ff);letter-spacing:.01em;text-align:center;width:100%}
+
+/* ── Bulk Import ── */
+#bulk-overlay{position:absolute;inset:0;background:rgba(92,122,101,.45);display:flex;align-items:flex-end;justify-content:center;z-index:200;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bulk-sheet{background:#fff;border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 24px;display:flex;flex-direction:column;gap:12px;max-height:88vh;overflow-y:auto}
+.bulk-drag-bar{width:40px;height:4px;background:var(--g3);border-radius:2px;margin:0 auto 4px}
+.bulk-title{font-size:15px;font-weight:800;color:var(--g5)}
+.bulk-hint{font-size:11px;color:var(--g4);font-weight:600;line-height:1.65;background:var(--g1);border-radius:12px;padding:10px 14px}
+.bulk-hint code{background:var(--g2);border-radius:5px;padding:1px 6px;font-family:var(--ff);font-size:11px}
+.bulk-textarea{width:100%;min-height:140px;border:1.5px solid var(--g3);border-radius:var(--br);padding:12px 14px;font-size:13px;font-family:var(--ff);font-weight:600;color:var(--g5);resize:none;outline:none;line-height:1.7;-webkit-overflow-scrolling:touch}
+.bulk-textarea:focus{border-color:var(--g4)}
+.bulk-textarea::placeholder{color:var(--g3);font-weight:500}
+.bulk-count{font-size:11px;font-weight:700;color:var(--g4);text-align:right}
+.bulk-preview{display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto}
+.bulk-row{font-size:11px;font-weight:600;font-family:var(--ff);background:var(--g2);border-radius:10px;padding:5px 12px;display:flex;gap:6px;align-items:center}
+.bulk-row .bw{color:var(--g5);min-width:60px}
+.bulk-row .bs{color:var(--g3);font-size:10px}
+.bulk-row .bm{color:var(--g4);flex:1}
+.bulk-row.err{background:#fff0f0;color:#d97272}
+.bulk-btn-row{display:flex;gap:10px}
+.btn-bulk-open{background:var(--g2);color:var(--g4);border:1.5px solid var(--g3);border-radius:var(--br);padding:11px 16px;font-size:13px;cursor:pointer;font-weight:700;font-family:var(--ff);display:flex;align-items:center;gap:6px;transition:.15s;flex:1;justify-content:center}
+.btn-bulk-open:active{background:var(--g3)}
+
+/* ── Sync Modal ── */
+.sync-drawer-btn{background:transparent;border:1.5px solid var(--g3);border-radius:var(--br);padding:9px 10px;font-size:12px;color:var(--g4);cursor:pointer;width:100%;font-family:var(--ff);font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;margin-top:6px}
+.sync-drawer-btn:active{background:var(--g3)}
+#sync-overlay{position:absolute;inset:0;background:rgba(92,122,101,.45);display:flex;align-items:flex-end;justify-content:center;z-index:300;padding-bottom:env(safe-area-inset-bottom,0px)}
+.sync-sheet{background:#fff;border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 28px;display:flex;flex-direction:column;gap:14px;max-height:90vh;overflow-y:auto}
+.sync-drag-bar{width:40px;height:4px;background:var(--g3);border-radius:2px;margin:0 auto 2px}
+.sync-sheet-title{font-size:15px;font-weight:800;color:var(--g5);display:flex;align-items:center;gap:7px}
+.sync-section{display:flex;flex-direction:column;gap:8px}
+.sync-label{font-size:10px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:.07em}
+.sync-export-box{background:var(--g1);border:1.5px solid var(--g3);border-radius:var(--br);padding:11px 14px;font-size:11px;font-family:monospace;color:var(--g5);word-break:break-all;line-height:1.6;max-height:60px;overflow-y:auto;user-select:all;-webkit-user-select:all}
+.sync-size-hint{font-size:11px;color:var(--g4);font-weight:600;text-align:right}
+.sync-copy-btn{background:var(--g4);color:#fff;border:none;border-radius:var(--br);padding:14px;font-size:14px;font-weight:700;font-family:var(--ff);width:100%;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.15s}
+.sync-copy-btn:active{background:var(--g5)}
+.sync-copy-btn.copied{background:var(--g5)}
+.sync-divider{border:none;border-top:1.5px solid var(--g2);margin:2px 0}
+.sync-import-ta{width:100%;height:72px;border:1.5px solid var(--g3);border-radius:var(--br);padding:11px 14px;font-size:12px;font-family:var(--ff);font-weight:600;color:var(--g5);resize:none;outline:none;line-height:1.5;background:#fff;-webkit-overflow-scrolling:touch}
+.sync-import-ta:focus{border-color:var(--g4)}
+.sync-import-ta::placeholder{color:var(--g3);font-weight:500}
+.sync-import-btn{background:var(--g4);color:#fff;border:none;border-radius:var(--br);padding:14px;font-size:14px;font-weight:700;font-family:var(--ff);width:100%;cursor:pointer;transition:.15s}
+.sync-import-btn:active{background:var(--g5)}
+.sync-import-btn:disabled{opacity:.38;cursor:not-allowed}
+.sync-close-btn{background:var(--g2);color:var(--g5);border:none;border-radius:var(--br);padding:12px;font-size:13px;font-weight:700;font-family:var(--ff);width:100%;cursor:pointer;transition:.15s}
+.sync-close-btn:active{background:var(--g3)}
+
+/* ── 언어 스위처 (topbar) ── */
+#lang-switcher{display:flex;flex-wrap:nowrap;gap:4px;align-items:center}
+.lang-mode-btn{background:var(--g2);border:1.5px solid var(--g3);border-radius:20px;padding:3px 7px;font-size:10px;font-weight:700;color:var(--g4);cursor:pointer;font-family:var(--ff);transition:.15s;white-space:nowrap;flex-shrink:0}
+.lang-mode-btn:active{opacity:.7}
+.lang-mode-btn.active{background:var(--g4);color:#fff;border-color:var(--g4)}
+.lang-mgr-btn{background:var(--g4);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;line-height:1}
+.lang-mgr-btn:active{background:var(--g5)}
+
+/* ── 언어 관리 바텀시트 ── */
+#lang-modal-overlay{position:absolute;inset:0;background:rgba(92,122,101,.45);display:flex;align-items:flex-end;justify-content:center;z-index:400;padding-bottom:env(safe-area-inset-bottom,0px)}
+.lang-modal-sheet{background:#fff;border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 28px;display:flex;flex-direction:column;gap:14px;max-height:85vh;overflow-y:auto}
+.lang-drag-bar{width:40px;height:4px;background:var(--g3);border-radius:2px;margin:0 auto 2px}
+.lang-modal-title{font-size:15px;font-weight:800;color:var(--g5)}
+.lang-item{display:flex;flex-direction:column;gap:8px;background:var(--g1);border-radius:14px;padding:12px 14px;border-left:3px solid var(--g4)}
+.lang-item-top{display:flex;align-items:center;gap:8px}
+.lang-item-name{flex:1;font-size:13px;font-weight:700;color:var(--g5);font-family:var(--ff)}
+.lang-item-edit{background:var(--g2);border:none;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--g4);cursor:pointer;font-family:var(--ff);white-space:nowrap}
+.lang-item-del{background:#e07070;border:none;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--ff);white-space:nowrap}
+.lang-item-del:disabled{opacity:.3;cursor:not-allowed}
+.lang-edit-row{display:none;gap:8px;align-items:center}
+.lang-del-confirm{display:none;gap:8px;align-items:center;background:#fff0f0;border-radius:10px;padding:8px 12px}
+.lang-del-msg{font-size:11px;font-weight:700;color:#c05050;flex:1;font-family:var(--ff)}
+.lang-name-inp{flex:1;border:1.5px solid var(--g3);border-radius:var(--br);padding:9px 12px;font-size:13px;font-family:var(--ff);font-weight:600;color:var(--g5);outline:none;background:#fff}
+.lang-name-inp:focus{border-color:var(--g4)}
+.lang-save-btn{background:var(--g4);color:#fff;border:none;border-radius:var(--br);padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--ff);white-space:nowrap}
+.lang-cancel-btn{background:var(--g2);color:var(--g5);border:none;border-radius:var(--br);padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--ff);white-space:nowrap}
+.lang-swatches{display:flex;gap:6px;align-items:center}
+.lang-add-row{display:flex;gap:8px}
+.lang-add-confirm-btn{background:var(--g4);color:#fff;border:none;border-radius:var(--br);padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--ff);white-space:nowrap}
+.lang-modal-close-btn{background:var(--g2);color:var(--g5);border:none;border-radius:var(--br);padding:12px;font-size:13px;font-weight:700;font-family:var(--ff);width:100%;cursor:pointer}
+.lang-modal-close-btn:active{background:var(--g3)}
+.lang-max-note{font-size:11px;color:var(--g4);text-align:center;font-weight:600;font-family:var(--ff)}
 </style>
 </head>
 <body>
@@ -159,12 +243,17 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-famil
       <span class="sb-label">Study Days</span>
       <button class="add-week-btn" id="add-week-btn">+</button>
     </div>
-    <div id="week-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    <div id="week-list" style="display:flex;flex-direction:column;gap:6px;overflow-y:auto;overflow-x:hidden;flex:1;min-height:0;-webkit-overflow-scrolling:touch"></div>
     <div class="sb-footer">
       <button class="how-to-btn" id="how-to-btn">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#84a38d" stroke-width="1.8"/><path d="M6.2 6C6.2 4.95 7 4.2 8 4.2C9 4.2 9.8 4.95 9.8 6C9.8 6.8 9.3 7.5 8.6 7.85C8.25 8.03 8 8.38 8 8.75V9.5" stroke="#84a38d" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.8" fill="#84a38d"/></svg>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="var(--g4)" stroke-width="1.8"/><path d="M6.2 6C6.2 4.95 7 4.2 8 4.2C9 4.2 9.8 4.95 9.8 6C9.8 6.8 9.3 7.5 8.6 7.85C8.25 8.03 8 8.38 8 8.75V9.5" stroke="var(--g4)" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.8" fill="var(--g4)"/></svg>
         How to use
       </button>
+      <button class="sync-drawer-btn" id="sync-drawer-btn">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8A5 5 0 1 1 3.5 4.5" stroke="var(--g4)" stroke-width="1.8" stroke-linecap="round"/><path d="M3 2l.5 2.5L6 4" stroke="var(--g4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sync Data
+      </button>
+      <div id="lang-switcher" style="display:flex;flex-wrap:nowrap;gap:4px;margin-top:10px;justify-content:center;align-items:center;width:100%;overflow:hidden"></div>
     </div>
   </div>
   <div id="main">
@@ -184,7 +273,10 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-famil
 </div>
 <div id="onboarding" style="display:none">
   <div class="ob-card">
-    <div class="ob-pic" id="ob-pic"></div>
+    <div class="ob-lang-bar" id="ob-lang-bar"></div>
+    <div class="ob-pic" id="ob-pic" style="justify-content:center;align-items:center"></div>
+    <div id="ob-tag-wrap" style="text-align:center;width:100%"></div>
+    <div id="ob-title"></div>
     <div class="ob-text" id="ob-text"></div>
     <div class="ob-bottom">
       <button id="ob-skip-btn">Skip</button>
@@ -199,18 +291,110 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--g1);font-famil
   </div>
 </div>
 
+<div id="bulk-overlay" style="display:none">
+  <div class="bulk-sheet" id="bulk-sheet">
+    <div class="bulk-drag-bar"></div>
+    <div class="bulk-title">📋 Bulk Add</div>
+    <div class="bulk-hint">
+      한 줄에 단어 하나씩 붙여넣으세요. 구분자는 자동으로 인식해요.<br>
+      <code>:</code> <code>-</code> <code>/</code> <code>탭</code> 또는 언어 경계<br>
+      예) <code>apple 사과</code> · <code>run: 달리다</code> · <code>big/큰</code>
+    </div>
+    <textarea class="bulk-textarea" id="bulk-ta" placeholder="apple 사과&#10;beautiful: 아름다운&#10;run - 달리다&#10;big/큰"></textarea>
+    <div class="bulk-count" id="bulk-count"></div>
+    <div class="bulk-preview" id="bulk-preview"></div>
+    <div class="bulk-btn-row">
+      <button class="btn-ghost" id="bulk-cancel-btn" style="flex:1">Cancel</button>
+      <button class="btn-start" id="bulk-add-btn" style="flex:2" disabled>Add All</button>
+    </div>
+  </div>
+</div>
+
+<div id="sync-overlay" style="display:none">
+  <div class="sync-sheet">
+    <div class="sync-drag-bar"></div>
+    <div class="sync-sheet-title">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8A5 5 0 1 1 3.5 4.5" stroke="var(--g4)" stroke-width="1.8" stroke-linecap="round"/><path d="M3 2l.5 2.5L6 4" stroke="var(--g4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Sync Data
+    </div>
+
+    <div class="sync-section">
+      <div class="sync-label">📤 Export — 최근 3일 데이터 내보내기</div>
+      <div class="sync-export-box" id="sync-export-box"></div>
+      <div class="sync-size-hint" id="sync-size-hint"></div>
+      <button class="sync-copy-btn" id="sync-copy-btn">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3 11V3a2 2 0 0 1 2-2h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+        전체 복사
+      </button>
+    </div>
+
+    <hr class="sync-divider"/>
+
+    <div class="sync-section">
+      <div class="sync-label">📥 Import — 데이터 가져오기</div>
+      <textarea class="sync-import-ta" id="sync-import-ta" placeholder="다른 기기에서 복사한 코드를 여기에 붙여넣으세요..."></textarea>
+      <button class="sync-import-btn" id="sync-import-btn" disabled>✅ 데이터 적용하기</button>
+    </div>
+
+    <button class="sync-close-btn" id="sync-close-btn">닫기</button>
+  </div>
+</div>
+
+<div id="lang-modal-overlay" style="display:none">
+  <div class="lang-modal-sheet">
+    <div class="lang-drag-bar"></div>
+    <div class="lang-modal-title">🌐 학습 언어 관리</div>
+    <div id="lang-list"></div>
+    <div id="lang-add-area"></div>
+    <button class="lang-modal-close-btn" id="lang-modal-close-btn">닫기</button>
+  </div>
+</div>
+
 <script>
 const SK='vocab7d_v8';
 function load(){try{return JSON.parse(localStorage.getItem(SK))||null}catch{return null}}
 function save(s){try{localStorage.setItem(SK,JSON.stringify(s))}catch{}}
 const DAY_ICO={1:'✏️',2:'✏️',3:'✏️',4:'✏️',5:'✏️',6:'🔁',7:'⚡'};
 function makeWeek(idx){const days={};for(let d=1;d<=7;d++)days[d]=[];return{idx,days,wrongCounts:{}}}
+function makeLang(id,name,color='green'){return{id,name,color,weeks:[makeWeek(1)],openWeeks:[1],curWeek:1,curDay:1,streak:0,lastDate:null}}
+
+const LANG_COLORS={
+  green: {id:'green',label:'그린',main:'#84a38d',light:'#d4eacc',text:'#5c7a65',g1:'#ecf7e6',g2:'#d4eacc',g3:'#b8d9a8',g4:'#84a38d',g5:'#5c7a65'},
+  pink:  {id:'pink', label:'핑크',main:'#c47f8a',light:'#f5dde0',text:'#8a4a55',g1:'#fdf0f2',g2:'#f5dde0',g3:'#e8b8bf',g4:'#c47f8a',g5:'#8a4a55'},
+  yellow:{id:'yellow',label:'옐로',main:'#b89a4a',light:'#f5edcc',text:'#7a6220',g1:'#fdf8e8',g2:'#f5edcc',g3:'#e0d09a',g4:'#b89a4a',g5:'#7a6220'},
+  blue:  {id:'blue', label:'블루',main:'#6a8fb5',light:'#d8e8f5',text:'#3a5f80',g1:'#edf4fb',g2:'#d8e8f5',g3:'#a8c8e8',g4:'#6a8fb5',g5:'#3a5f80'},
+};
+const COLOR_CHOICES=['pink','yellow','blue'];
+
+function applyTheme(colorId){
+  const c=LANG_COLORS[colorId]||LANG_COLORS.green;
+  const r=document.documentElement.style;
+  r.setProperty('--g1',c.g1);r.setProperty('--g2',c.g2);
+  r.setProperty('--g3',c.g3);r.setProperty('--g4',c.g4);r.setProperty('--g5',c.g5);
+}
+function cL(){return state.langs[state.curLang]}
 
 let state=load();
-if(!state)state={weeks:[makeWeek(1)],openWeeks:[1],curWeek:1,curDay:1,streak:0,lastDate:null,seenOnboarding:false};
-if(!state.weeks){const w=makeWeek(1);w.days=state.days||{};w.wrongCounts=state.wrongCounts||{};state={weeks:[w],openWeeks:[1],curWeek:1,curDay:1,streak:state.streak||0,lastDate:state.lastDate||null,seenOnboarding:false}}
-if(!state.openWeeks)state.openWeeks=[1];
+// ── 마이그레이션 ──
+if(!state){
+  state={langs:[makeLang(1,'L1')],curLang:0,seenOnboarding:false};
+}else if(!state.langs){
+  const lg=makeLang(1,'L1');
+  if(state.weeks)lg.weeks=state.weeks;
+  if(state.openWeeks)lg.openWeeks=state.openWeeks;
+  if(state.curWeek)lg.curWeek=state.curWeek;
+  if(state.curDay)lg.curDay=state.curDay;
+  if(state.streak)lg.streak=state.streak;
+  if(state.lastDate)lg.lastDate=state.lastDate;
+  state={langs:[lg],curLang:0,seenOnboarding:state.seenOnboarding||false};
+}
+if(state.curLang===undefined)state.curLang=0;
 if(state.seenOnboarding===undefined)state.seenOnboarding=false;
+state.langs.forEach((lang,i)=>{
+  if(/^제\d언어$/.test(lang.name))lang.name='L'+(i+1);
+  if(!lang.color)lang.color=i===0?'green':COLOR_CHOICES[i-1]||COLOR_CHOICES[0];
+});
+
 let curView='day',pendingDel=null,allFilter='all',obPage=0;
 
 /* ── DRAWER ── */
@@ -227,45 +411,110 @@ function toggleDrawer(){
 }
 
 /* ── ONBOARDING ── */
-const OB=[
-  {text:'이 어플은 효과적인 외국어 단어 암기를 위해\n<b>제작되었습니다.</b>\n\n총 <b>7일의 사이클</b>을 기준으로 진행됩니다.\n1일차 ~ 5일차는 새로운 단어 습득 중심,\n<b>6일차 · 7일차</b>는 복습 중심으로 진행됩니다.',
-   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="10" y="20" width="60" height="75" rx="8" stroke="#84a38d" stroke-width="3" fill="none"/><line x1="22" y1="38" x2="58" y2="38" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="50" x2="58" y2="50" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="62" x2="48" y2="62" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><rect x="28" y="10" width="60" height="75" rx="8" fill="#ecf7e6" stroke="#84a38d" stroke-width="2.2"/><line x1="40" y1="28" x2="76" y2="28" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="40" x2="76" y2="40" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="52" x2="65" y2="52" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round"/><circle cx="128" cy="55" r="24" stroke="#84a38d" stroke-width="2.5" fill="none"/><path d="M128 35 L128 55 L142 55" stroke="#84a38d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="128" cy="55" r="3" fill="#84a38d"/><text x="116" y="92" font-family="Nunito,sans-serif" font-size="9" fill="#84a38d" font-weight="700">7-day cycle</text></svg>'},
-  {text:'단어와 뜻을 입력하고 <b>Add</b> 버튼을 눌러\n오늘의 단어들을 추가해주세요.\n\n단어를 추가했다면 <b>Start Matching</b> 버튼을\n눌러 단어 매칭 게임을 시작해주세요.',
-   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="8" y="15" width="144" height="30" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><rect x="14" y="21" width="55" height="18" rx="6" fill="#fff" stroke="#84a38d" stroke-width="1.5"/><rect x="76" y="21" width="46" height="18" rx="6" fill="#fff" stroke="#84a38d" stroke-width="1.5"/><rect x="127" y="21" width="19" height="18" rx="6" fill="#84a38d"/><text x="131" y="33" font-family="Nunito,sans-serif" font-size="9" fill="#fff" font-weight="700">+</text><text x="22" y="33" font-family="Nunito,sans-serif" font-size="8" fill="#84a38d" font-weight="600">apple</text><text x="82" y="33" font-family="Nunito,sans-serif" font-size="8" fill="#84a38d" font-weight="600">사과</text><rect x="8" y="52" width="144" height="18" rx="7" fill="#ecf7e6" stroke="#84a38d" stroke-width="1.5" stroke-dasharray="4 3"/><text x="50" y="65" font-family="Nunito,sans-serif" font-size="8.5" fill="#84a38d" font-weight="600">apple — 사과</text><rect x="30" y="80" width="100" height="22" rx="10" fill="#84a38d"/><text x="47" y="95" font-family="Nunito,sans-serif" font-size="9" fill="#fff" font-weight="700">▶ Start Matching</text></svg>'},
-  {text:'매칭 게임으로 단어를 암기합니다.\n단어는 <b>격일로 자동 믹스</b>됩니다.\n(예: Day 1 → Day 1 단어,\nDay 3 → Day 1 + Day 3 단어)\n\n오른쪽 상단에서 <b>연속 학습 일수</b>를 확인할 수 있습니다.',
-   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="8" y="8" width="68" height="42" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><rect x="84" y="8" width="68" height="42" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><text x="28" y="33" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">apple</text><text x="98" y="33" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">사과</text><defs><marker id="ar" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#84a38d"/></marker></defs><path d="M76 29 L84 29" stroke="#84a38d" stroke-width="2" stroke-linecap="round" marker-end="url(#ar)"/><rect x="8" y="58" width="68" height="42" rx="10" fill="#d4eacc" stroke="#84a38d" stroke-width="2"/><text x="22" y="83" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">beautiful</text><rect x="84" y="58" width="68" height="42" rx="10" fill="#d4eacc" stroke="#84a38d" stroke-width="2"/><text x="95" y="83" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">아름다운</text><path d="M76 79 L84 79" stroke="#84a38d" stroke-width="2" stroke-linecap="round" marker-end="url(#ar)"/></svg>'},
-  {text:'왼쪽 상단 <b>☰ 메뉴</b>를 눌러 주차와 학습일을 선택하고,\n<b>All Words</b>에서 지금까지 추가한\n모든 단어를 확인할 수 있습니다.',
-   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><rect x="8" y="8" width="48" height="94" rx="12" fill="#d4eacc" stroke="#84a38d" stroke-width="2"/><rect x="14" y="18" width="36" height="14" rx="7" fill="#84a38d"/><text x="19" y="28" font-family="Nunito,sans-serif" font-size="7.5" fill="#fff" font-weight="700">📋 All</text><rect x="14" y="36" width="36" height="13" rx="6" fill="#b8d9a8" stroke="#84a38d" stroke-width="1"/><text x="18" y="46" font-family="Nunito,sans-serif" font-size="7" fill="#5c7a65" font-weight="600">📅 Week 1</text><rect x="14" y="53" width="36" height="13" rx="6" fill="#b8d9a8" stroke="#84a38d" stroke-width="1"/><text x="18" y="63" font-family="Nunito,sans-serif" font-size="7" fill="#5c7a65" font-weight="600">📅 Week 2</text><rect x="64" y="8" width="88" height="94" rx="12" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><text x="72" y="22" font-family="Nunito,sans-serif" font-size="7" fill="#84a38d" font-weight="700">Word</text><text x="108" y="22" font-family="Nunito,sans-serif" font-size="7" fill="#84a38d" font-weight="700">Meaning</text><line x1="72" y1="26" x2="144" y2="26" stroke="#84a38d" stroke-width="1.5" stroke-linecap="round"/><text x="72" y="38" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">apple</text><text x="108" y="38" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">사과</text><text x="72" y="52" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">happy</text><text x="108" y="52" font-family="Nunito,sans-serif" font-size="7.5" fill="#5c7a65" font-weight="600">행복한</text></svg>'},
-  {final:true, text:'',
-   svg:'<svg viewBox="0 0 160 110" width="130" fill="none"><path d="M80 95C80 95 20 65 20 38C20 24 32 14 45 14C57 14 67 22 80 34C93 22 103 14 115 14C128 14 140 24 140 38C140 65 80 95 80 95Z" fill="#84a38d" opacity=".18"/><path d="M80 88C80 88 25 61 25 38C25 27 35 18 47 18C58 18 68 26 80 38C92 26 102 18 113 18C125 18 135 27 135 38C135 61 80 88 80 88Z" fill="#84a38d" opacity=".35"/><path d="M80 82C80 82 30 57 30 38C30 29 39 22 49 22C60 22 70 30 80 42C90 30 100 22 111 22C121 22 130 29 130 38C130 57 80 82 80 82Z" fill="#84a38d"/></svg>'}
+let obLang='ko';
+
+const OB_CONTENT={
+  ko:[
+    {emoji:'👋',tag:'반갑습니다!',title:'가볍게, 하지만 확실하게',body:'일과 중 새로 배운 단어를 <b>그때그때 저장</b>하고,\n저녁에 <b>매칭 게임</b>으로 재밌게 복습해보세요.\n꾸준한 단어 습득을 돕기 위해 태어난 어플입니다.'},
+    {emoji:'📅',tag:'7일간의 스마트 사이클',title:'망각곡선을 고려한 학습 시스템',body:'<b>1~5일차</b>는 새로운 단어를 학습하고,\n<b>6~7일차</b>는 복습에 집중합니다.\n\n• <b>1~2일:</b> 당일 단어 집중 매칭\n• <b>3~5일:</b> 새 단어 + 이전 단어 믹스로 기억 강화'},
+    {emoji:'🔄',tag:'주말 집중 복습',title:'빈틈없는 마무리',body:'<b>6일차:</b> 1~5일 전체 단어를 무작위로 섞어\n실력을 점검합니다.\n\n<b>7일차:</b> 그동안 자주 틀렸던 <b>오답</b> 위주로\n구성된 특별 스테이지가 열립니다. ⚡'},
+    {emoji:'➕',tag:'자유로운 기록 관리',title:'Week 단위로 관리하세요',body:'상단 <b>[+] 버튼</b>으로 새로운 7일을 추가할 수 있습니다.\n\n• <b>날개 접기:</b> 완료한 week는 접어서 깔끔하게 보관\n• <b>삭제:</b> week를 왼쪽으로 <b>밀면(Swipe)</b> 간편하게 삭제'},
+    {emoji:'📖',tag:'한눈에 보는 단어장',title:'All Words 메뉴',body:'내가 입력한 <b>모든 단어</b>를 한곳에서 확인하세요.\n\n전체 리스트는 물론, <b>특정 Week별</b>로만\n모아보는 필터링 기능도 제공합니다.'},
+    {emoji:'⚡',tag:'일괄 입력의 편리함',title:'Bulk Add 기능',body:'메모장에 적어둔 단어들을 <b>하나씩 옮기지 마세요.</b>\n\n일괄 입력 버튼을 누르고 복사한 내용을\n붙여넣기만 하면, 어플이 단어와 뜻을\n<b>똑똑하게 분리</b>해서 저장해줍니다.'},
+    {emoji:'☁️',tag:'어디서나 이어하기',title:'Sync Data',body:'회사 PC와 개인 핸드폰을 오가며 공부하시나요?\n\n<b>동기화 코드</b>를 복사해 붙여넣으면\n기기 간에 최근 데이터를 완벽하게 전송할 수 있습니다.'},
+    {emoji:'💚',tag:'시작해봐요!',title:'오늘부터 함께해요',body:'그럼 오늘부터 열심히\n어휘공부를 시작해주세요!\n\n<b>화이팅! 💪</b>',finalHeart:true,lastLabel:'시작하기!'}
+  ],
+  jp:[
+    {emoji:'👋',tag:'はじめまして！',title:'日常で出会った言葉を、もっと楽しく。',body:'仕事や生活の中で見つけた新しい単語を\nその場で記録し、夜に<b>マッチングゲーム</b>で\n楽しく復習しましょう。\n無理なく継続できる学習パートナーです。'},
+    {emoji:'📅',tag:'スマートな7日間サイクル',title:'忘却曲線を考慮した学習システム',body:'<b>1〜5日目</b>は新しい単語を学び、\n<b>6〜7日目</b>は復習に集中します。\n\n3日目からは以前の単語がミックスして登場する\nスマートな学習システムです。'},
+    {emoji:'🔄',tag:'週末の集中トレーニング',title:'完璧な仕上げ',body:'<b>6日目:</b> 1〜5日の全単語をランダムにシャッフルして\n実力をテスト。\n\n<b>7日目:</b> 苦手な単語を克服！\n間違いやすい単語を中心とした特別ステージ。 ⚡'},
+    {emoji:'➕',tag:'自由なウィーク管理',title:'週ごとにスマートに管理',body:'上部の <b>[+] ボタン</b>で新しい週を追加。\n終わった週は折りたたんでスッキリ整理。\n左にスワイプすれば削除も簡単です。'},
+    {emoji:'📖',tag:'単語帳をひと目で確認',title:'All Words メニュー',body:'<b>All Words</b> メニューで、これまで登録した\nすべての単語を確認できます。\n\n特定の週だけを表示する\nフィルタリング機能も便利です。'},
+    {emoji:'⚡',tag:'一括入力で効率アップ',title:'Bulk Add 機能',body:'メモ帳の単語を一つずつ移す必要はありません。\n\n<b>Bulk Add</b> でコピーした内容を貼り付けるだけで、\n単語と意味を<b>自動で判別</b>して保存します。'},
+    {emoji:'☁️',tag:'どこでも続きを',title:'Sync Data',body:'会社のPCと個人のスマホ、両方で使えます。\n\n<b>Sync Data</b> からコードをコピーして\n貼り付けるだけで、最新の学習データを\n簡単に同期できます。'},
+    {emoji:'💚',tag:'さあ、始めましょう！',title:'今日から一緒に。',body:'今日から楽しく、コツコツと\n語彙力を高めていきましょう！\n\n<b>応援しています！💪</b>',finalHeart:true,lastLabel:'始めましょう！'}
+  ],
+  en:[
+    {emoji:'👋',tag:'Nice to meet you!',title:'Make daily vocabulary learning fun.',body:'Quickly jot down new words you encounter\nthroughout the day and review them with a\n<b>matching game</b> at night.\nYour light and steady study companion.'},
+    {emoji:'📅',tag:'Smart 7-Day Cycle',title:'Learning System Based on the Forgetting Curve',body:'Focus on <b>learning from Day 1–5</b>,\nand <b>review on Day 6–7</b>.\n\nOur smart system mixes previous words\nstarting from Day 3 to strengthen long-term memory.'},
+    {emoji:'🔄',tag:'Weekend Intensive Review',title:'The Perfect Wrap-up',body:'<b>Day 6:</b> Test your skills with a random shuffle\nof all words from Day 1–5.\n\n<b>Day 7:</b> Conquer your weak points!\nA special stage focused on your most frequent mistakes. ⚡'},
+    {emoji:'➕',tag:'Manage Your Weeks',title:'Manage by the Week',body:'Tap the <b>[+] button</b> to start a new week.\n\nFold finished weeks to keep things tidy,\nor simply <b>swipe left</b> to delete.'},
+    {emoji:'📖',tag:'All Words at a Glance',title:'All Words tab',body:'Check all your saved words in the\n<b>All Words</b> menu.\n\nUse the filter to view specific weeks\nand track your overall progress.'},
+    {emoji:'⚡',tag:'Efficient Bulk Add',title:'Bulk Add button',body:'No need to type words one by one.\n\nUse <b>Bulk Add</b> to paste your notes;\nthe app will intelligently <b>separate and save</b>\nwords and meanings for you.'},
+    {emoji:'☁️',tag:'Sync Anywhere',title:'Sync Data',body:'Switching between PC and mobile?\n\nUse <b>Sync Data</b> to copy and paste\nyour unique code. Keep your latest progress\nupdated on any device instantly.'},
+    {emoji:'💚',tag:"Let's Get Started!",title:'Start your journey today.',body:"Ready to level up your vocabulary?\nLet's make every day count.\n\n<b>Good luck! 💪</b>",finalHeart:true,lastLabel:"Let's go!"}
+  ]
+};
+
+const OB_SVGS=[
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><rect x="20" y="15" width="52" height="70" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><rect x="26" y="24" width="40" height="6" rx="3" fill="#b8d9a8"/><rect x="26" y="34" width="32" height="6" rx="3" fill="#b8d9a8"/><rect x="26" y="44" width="36" height="6" rx="3" fill="#b8d9a8"/><rect x="26" y="54" width="28" height="6" rx="3" fill="#d4eacc"/><rect x="88" y="30" width="52" height="40" rx="10" fill="#84a38d"/><text x="100" y="56" font-family="Nunito,sans-serif" font-size="22" fill="#fff">🎮</text></svg>`,
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><defs><marker id="a" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5Z" fill="#84a38d"/></marker></defs>${[1,2,3,4,5].map((d,i)=>`<rect x="${8+i*28}" y="${60-i*6}" width="22" height="${30+i*6}" rx="4" fill="${i<2?'#b8d9a8':'#84a38d'}" opacity="${0.5+i*0.1}"/><text x="${19+i*28}" y="95" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#5c7a65" font-weight="700">${d}</text>`).join('')}<rect x="148" y="10" width="10" height="80" rx="4" fill="#d4eacc"/><text x="153" y="56" text-anchor="middle" font-family="Nunito,sans-serif" font-size="7" fill="#84a38d" font-weight="700">6</text></svg>`,
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><circle cx="80" cy="50" r="38" stroke="#84a38d" stroke-width="2" fill="#ecf7e6"/><circle cx="80" cy="50" r="38" stroke="#84a38d" stroke-width="6" fill="none" stroke-dasharray="60 180" stroke-dashoffset="-30" stroke-linecap="round"/><text x="80" y="46" text-anchor="middle" font-family="Nunito,sans-serif" font-size="10" fill="#84a38d" font-weight="700">Day 6</text><text x="80" y="60" text-anchor="middle" font-family="Nunito,sans-serif" font-size="9" fill="#5c7a65" font-weight="600">Review</text><text x="130" y="25" font-family="Nunito,sans-serif" font-size="18">⚡</text></svg>`,
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><rect x="10" y="10" width="140" height="22" rx="8" fill="#84a38d"/><text x="20" y="25" font-family="Nunito,sans-serif" font-size="9" fill="#fff" font-weight="700">📅 Week 1</text><text x="138" y="25" text-anchor="middle" font-family="Nunito,sans-serif" font-size="12" fill="#fff">▾</text><rect x="20" y="36" width="130" height="14" rx="5" fill="#b8d9a8"/><rect x="20" y="54" width="140" height="22" rx="8" fill="#d4eacc" stroke="#84a38d" stroke-width="1.5" stroke-dasharray="4 3"/><text x="20" y="69" font-family="Nunito,sans-serif" font-size="9" fill="#84a38d" font-weight="700">📅 Week 2</text><text x="138" y="69" text-anchor="middle" font-family="Nunito,sans-serif" font-size="12" fill="#84a38d">+</text><rect x="110" y="78" width="40" height="16" rx="6" fill="#e07070"/><text x="130" y="90" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#fff" font-weight="700">Delete</text></svg>`,
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><rect x="8" y="8" width="144" height="84" rx="12" fill="#ecf7e6" stroke="#84a38d" stroke-width="1.5"/><rect x="16" y="16" width="40" height="14" rx="7" fill="#84a38d"/><text x="36" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#fff" font-weight="700">All</text><rect x="62" y="16" width="40" height="14" rx="7" fill="#d4eacc" stroke="#84a38d" stroke-width="1"/><text x="82" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#5c7a65" font-weight="600">Week 1</text><rect x="108" y="16" width="40" height="14" rx="7" fill="#d4eacc" stroke="#84a38d" stroke-width="1"/><text x="128" y="26" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#5c7a65" font-weight="600">Week 2</text><line x1="16" y1="38" x2="144" y2="38" stroke="#b8d9a8" stroke-width="1"/>${[0,1,2,3].map(i=>`<rect x="16" y="${44+i*14}" width="60" height="9" rx="4" fill="#b8d9a8" opacity="${1-i*0.15}"/><rect x="84" y="${44+i*14}" width="60" height="9" rx="4" fill="#d4eacc" opacity="${1-i*0.15}"/>`).join('')}</svg>`,
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><rect x="8" y="8" width="144" height="54" rx="10" fill="#ecf7e6" stroke="#84a38d" stroke-width="1.5"/><text x="20" y="28" font-family="Nunito,sans-serif" font-size="9" fill="#5c7a65" font-weight="600">apple 사과</text><text x="20" y="42" font-family="Nunito,sans-serif" font-size="9" fill="#5c7a65" font-weight="600">run: 달리다</text><text x="20" y="56" font-family="Nunito,sans-serif" font-size="9" fill="#5c7a65" font-weight="600">big/큰</text><path d="M80 70 L80 78" stroke="#84a38d" stroke-width="2" stroke-linecap="round"/><path d="M74 74 L80 80 L86 74" stroke="#84a38d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="24" y="82" width="50" height="14" rx="6" fill="#b8d9a8"/><rect x="86" y="82" width="50" height="14" rx="6" fill="#b8d9a8"/><text x="49" y="92" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#5c7a65" font-weight="700">apple</text><text x="111" y="92" text-anchor="middle" font-family="Nunito,sans-serif" font-size="8" fill="#5c7a65" font-weight="700">사과</text></svg>`,
+  `<svg viewBox="0 0 160 100" width="130" fill="none"><path d="M80 20 C55 20 36 38 36 60 C36 75 47 88 62 90 L98 90 C113 88 124 75 124 60 C124 38 105 20 80 20Z" fill="#ecf7e6" stroke="#84a38d" stroke-width="2"/><path d="M62 60 L72 70 L96 46" stroke="#84a38d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 38 C44 30 42 18 50 12 C56 7 64 10 68 16" stroke="#84a38d" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/><path d="M110 38 C116 30 118 18 110 12 C104 7 96 10 92 16" stroke="#84a38d" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/></svg>`,
+  null  // 마지막 페이지: 하트 SVG
 ];
 
+const HEART_SVG=`<svg viewBox="0 0 140 100" width="130" fill="none"><path d="M70 85C70 85 18 55 18 30C18 17 28 8 40 8C51 8 60 16 70 27C80 16 89 8 100 8C112 8 122 17 122 30C122 55 70 85 70 85Z" fill="#84a38d" opacity=".2"/><path d="M70 80C70 80 20 52 20 30C20 19 29 10 40 10C51 10 60 19 70 30C80 19 89 10 100 10C111 10 120 19 120 30C120 52 70 80 70 80Z" fill="#84a38d" opacity=".5"/><path d="M70 74C70 74 22 49 22 30C22 21 30 13 40 13C51 13 60 22 70 34C80 22 89 13 100 13C110 13 118 21 118 30C118 49 70 74 70 74Z" fill="#84a38d"/></svg>`;
+
 function renderOB(){
-  const p=OB[obPage];
-  const total=OB.length;
+  const pages=OB_CONTENT[obLang];
+  const p=pages[obPage];
+  const total=pages.length;
   const isLast=obPage===total-1;
-  document.getElementById('ob-pic').innerHTML=p.svg;
-  if(p.final){
-    document.getElementById('ob-text').innerHTML='';
-    document.getElementById('ob-text').style.cssText='font-size:16px;font-weight:800;color:#84a38d;line-height:2;text-align:center;margin-bottom:20px';
-    document.getElementById('ob-text').innerHTML='그럼 오늘부터 열심히<br>어휘 공부를 시작해주세요!';
+
+  // 언어 선택 바
+  document.getElementById('ob-lang-bar').innerHTML=
+    ['ko','jp','en'].map(l=>
+      `<button class="ob-lang-btn${obLang===l?' active':''}" data-lang="${l}">${l.toUpperCase()}</button>`
+    ).join('');
+  document.querySelectorAll('.ob-lang-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>setObLang(btn.dataset.lang));
+  });
+
+  // SVG 이미지
+  document.getElementById('ob-pic').innerHTML=p.finalHeart?HEART_SVG:(OB_SVGS[obPage]||'');
+
+  // 태그 칩
+  document.getElementById('ob-tag-wrap').innerHTML=
+    `<span class="ob-tag">${p.emoji} ${p.tag}</span>`;
+
+  // 소제목 [ ]
+  document.getElementById('ob-title').className='ob-title';
+  document.getElementById('ob-title').innerHTML=p.title?`[ ${p.title} ]`:'';
+
+  // 본문
+  const textEl=document.getElementById('ob-text');
+  if(p.finalHeart){
+    textEl.style.cssText='font-size:14px;font-weight:700;color:var(--g4);line-height:2;text-align:center;margin-bottom:20px';
   }else{
-    document.getElementById('ob-text').style.cssText='';
-    document.getElementById('ob-text').innerHTML=p.text.replace(/\n/g,'<br>');
+    textEl.style.cssText='';
   }
-  const dotsEl=document.getElementById('ob-dots');
-  dotsEl.innerHTML=Array.from({length:total},(_,i)=>`<div class="ob-dot${i===obPage?' active':''}"></div>`).join('');
-  document.getElementById('ob-skip-btn').textContent=isLast?'':' Skip';
-  const svg=document.getElementById('ob-arrow-svg');
+  textEl.innerHTML=p.body.replace(/\n/g,'<br>');
+
+  // 도트
+  document.getElementById('ob-dots').innerHTML=
+    Array.from({length:total},(_,i)=>`<div class="ob-dot${i===obPage?' active':''}"></div>`).join('');
+
+  // Skip 버튼
+  const skipBtn=document.getElementById('ob-skip-btn');
+  skipBtn.textContent=isLast?(p.lastLabel||'Start!'):'Skip';
+  skipBtn.onclick=closeOB;
+
+  // 화살표 버튼
+  const arrowSvg=document.getElementById('ob-arrow-svg');
   if(isLast){
-    svg.innerHTML='<rect width="36" height="36" rx="18" fill="#84a38d"/><path d="M14 10 L24 18 L14 26" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+    arrowSvg.innerHTML='<rect width="36" height="36" rx="18" fill="#84a38d"/><path d="M14 10 L24 18 L14 26" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
   }else{
-    svg.innerHTML='<circle cx="18" cy="18" r="16" stroke="#84a38d" stroke-width="2.5"/><path d="M14 10 L24 18 L14 26" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    arrowSvg.innerHTML='<circle cx="18" cy="18" r="16" stroke="#84a38d" stroke-width="2.5"/><path d="M14 10 L24 18 L14 26" stroke="#84a38d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
   }
   document.getElementById('ob-arrow-btn').onclick=isLast?closeOB:obNext;
-  document.getElementById('ob-skip-btn').onclick=closeOB;
 }
-function obNext(){if(obPage<OB.length-1){obPage++;renderOB()}}
+
+function setObLang(lang){obLang=lang;obPage=0;renderOB();}
+function obNext(){if(obPage<OB_CONTENT[obLang].length-1){obPage++;renderOB()}}
 function openOnboarding(){obPage=0;renderOB();document.getElementById('onboarding').style.display='flex'}
 function closeOB(){document.getElementById('onboarding').style.display='none';state.seenOnboarding=true;save(state)}
 
@@ -273,36 +522,175 @@ function closeOB(){document.getElementById('onboarding').style.display='none';st
 function todayStr(){return new Date().toISOString().slice(0,10)}
 function initCycle(){
   const t=todayStr();
-  if(state.lastDate!==t){
-    if(state.lastDate){const d=Math.floor((new Date(t)-new Date(state.lastDate))/86400000);state.streak=d===1?state.streak+1:1}
-    else state.streak=1;
-    state.lastDate=t;
-  }
+  state.langs.forEach(lang=>{
+    if(lang.lastDate!==t){
+      if(lang.lastDate){const d=Math.floor((new Date(t)-new Date(lang.lastDate))/86400000);lang.streak=d===1?lang.streak+1:1}
+      else lang.streak=1;
+      lang.lastDate=t;
+    }
+  });
   save(state);
+  applyTheme(cL().color);
   if(!state.seenOnboarding)openOnboarding();
   render();
 }
 
+/* ── LANG SWITCHER ── */
+function renderLangSwitcher(){
+  const sw=document.getElementById('lang-switcher');
+  sw.innerHTML='';
+  state.langs.forEach((lang,i)=>{
+    const c=LANG_COLORS[lang.color]||LANG_COLORS.green;
+    const isActive=i===state.curLang;
+    const btn=document.createElement('button');
+    btn.className='lang-mode-btn'+(isActive?' active':'');
+    btn.textContent=lang.name.slice(0,3);
+    btn.title=lang.name;
+    btn.style.borderColor=c.main;
+    btn.style.color=isActive?'#fff':c.main;
+    if(isActive)btn.style.background=c.main; else btn.style.background='';
+    btn.addEventListener('click',()=>switchLang(i));
+    sw.appendChild(btn);
+  });
+  const mgBtn=document.createElement('button');
+  mgBtn.className='lang-mgr-btn';
+  mgBtn.style.background=LANG_COLORS[cL().color].main;
+  mgBtn.textContent=state.langs.length<3?'+':'⚙';
+  mgBtn.title=state.langs.length<3?'언어 추가':'언어 관리';
+  mgBtn.style.fontSize=state.langs.length>=3?'11px':'14px';
+  mgBtn.addEventListener('click',openLangModal);
+  sw.appendChild(mgBtn);
+}
+
+function switchLang(i){
+  state.curLang=i;
+  allFilter='all';pendingDel=null;curView='day';
+  applyTheme(cL().color);
+  save(state);render();
+}
+
+function openLangModal(){
+  renderLangModal();
+  document.getElementById('lang-modal-overlay').style.display='flex';
+}
+function closeLangModal(){
+  document.getElementById('lang-modal-overlay').style.display='none';
+}
+
+function renderLangModal(){
+  const list=document.getElementById('lang-list');
+  list.innerHTML='';
+  state.langs.forEach((lang,i)=>{
+    const c=LANG_COLORS[lang.color]||LANG_COLORS.green;
+    const item=document.createElement('div');item.className='lang-item';
+    item.style.borderLeftColor=c.main;
+
+    // 상단 행
+    const topRow=document.createElement('div');topRow.className='lang-item-top';
+    const nameEl=document.createElement('div');nameEl.className='lang-item-name';
+    nameEl.textContent=lang.name;nameEl.style.color=c.text;
+    const editBtn=document.createElement('button');editBtn.className='lang-item-edit';editBtn.textContent='이름';
+    editBtn.style.cssText=`background:${c.light};color:${c.text}`;
+    const delBtn=document.createElement('button');delBtn.className='lang-item-del';delBtn.textContent='삭제';
+    delBtn.disabled=state.langs.length<=1;
+    topRow.appendChild(nameEl);
+
+    // L2, L3 색상 스와치
+    if(i>0){
+      const sw=document.createElement('div');sw.className='lang-swatches';
+      COLOR_CHOICES.forEach(cid=>{
+        const cc=LANG_COLORS[cid];
+        const s=document.createElement('button');
+        s.style.cssText=`width:18px;height:18px;border-radius:50%;background:${cc.main};border:2.5px solid ${lang.color===cid?'#fff':'transparent'};box-shadow:${lang.color===cid?'0 0 0 2px '+cc.main:''};cursor:pointer;padding:0;flex-shrink:0`;
+        s.title=cc.label;
+        s.addEventListener('click',()=>{lang.color=cid;save(state);if(i===state.curLang)applyTheme(cid);renderLangModal();renderLangSwitcher();});
+        sw.appendChild(s);
+      });
+      topRow.appendChild(sw);
+    }
+    topRow.appendChild(editBtn);topRow.appendChild(delBtn);
+    item.appendChild(topRow);
+
+    // 이름 편집 행
+    const editRow=document.createElement('div');editRow.className='lang-edit-row';
+    const nameInp=document.createElement('input');nameInp.className='lang-name-inp';
+    nameInp.value=lang.name;nameInp.maxLength=12;nameInp.style.borderColor=c.main;
+    const saveBtn=document.createElement('button');saveBtn.className='lang-save-btn';saveBtn.textContent='저장';
+    saveBtn.style.background=c.main;
+    const cancelBtn=document.createElement('button');cancelBtn.className='lang-cancel-btn';cancelBtn.textContent='취소';
+    editBtn.addEventListener('click',()=>{editRow.style.display='flex';nameInp.value=lang.name;nameInp.focus();nameInp.select();});
+    saveBtn.addEventListener('click',()=>{const v=nameInp.value.trim();if(v){lang.name=v;save(state);}editRow.style.display='none';renderLangModal();renderLangSwitcher();});
+    cancelBtn.addEventListener('click',()=>{editRow.style.display='none';});
+    nameInp.addEventListener('keydown',e=>{if(e.key==='Enter')saveBtn.click();if(e.key==='Escape')cancelBtn.click();});
+    editRow.appendChild(nameInp);editRow.appendChild(saveBtn);editRow.appendChild(cancelBtn);
+    item.appendChild(editRow);
+
+    // 삭제 확인 행
+    const delConfirm=document.createElement('div');delConfirm.className='lang-del-confirm';
+    const delMsg=document.createElement('span');delMsg.className='lang-del-msg';delMsg.textContent=`"${lang.name}" 삭제할까요?`;
+    const delYes=document.createElement('button');delYes.className='lang-item-del';delYes.textContent='삭제';delYes.style.padding='5px 12px';
+    delYes.addEventListener('click',()=>{
+      state.langs.splice(i,1);
+      if(state.curLang>=state.langs.length)state.curLang=state.langs.length-1;
+      applyTheme(cL().color);
+      save(state);renderLangModal();renderLangSwitcher();
+      allFilter='all';pendingDel=null;curView='day';render();
+    });
+    const delNo=document.createElement('button');delNo.className='lang-cancel-btn';delNo.textContent='취소';delNo.style.padding='5px 10px';
+    delNo.addEventListener('click',()=>{delConfirm.style.display='none';});
+    delBtn.addEventListener('click',()=>{if(state.langs.length<=1)return;delConfirm.style.display='flex';});
+    delConfirm.appendChild(delMsg);delConfirm.appendChild(delYes);delConfirm.appendChild(delNo);
+    item.appendChild(delConfirm);
+    list.appendChild(item);
+  });
+
+  const addArea=document.getElementById('lang-add-area');
+  addArea.innerHTML='';
+  if(state.langs.length<3){
+    const defaultName='L'+(state.langs.length+1);
+    const row=document.createElement('div');row.className='lang-add-row';
+    const inp=document.createElement('input');inp.className='lang-name-inp';
+    inp.placeholder=`이름 (기본: ${defaultName})`;inp.maxLength=12;
+    const addBtn=document.createElement('button');addBtn.className='lang-add-confirm-btn';addBtn.textContent='+ 추가';
+    addBtn.addEventListener('click',()=>{
+      const name=inp.value.trim()||defaultName;
+      const newId=Math.max(...state.langs.map(l=>l.id))+1;
+      const usedColors=state.langs.map(l=>l.color);
+      const autoColor=COLOR_CHOICES.find(c=>!usedColors.includes(c))||COLOR_CHOICES[0];
+      state.langs.push(makeLang(newId,name,autoColor));
+      save(state);renderLangModal();renderLangSwitcher();inp.value='';
+    });
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')addBtn.click();});
+    row.appendChild(inp);row.appendChild(addBtn);addArea.appendChild(row);
+  }else{
+    const note=document.createElement('div');note.className='lang-max-note';
+    note.textContent='최대 3개 언어까지 추가할 수 있어요.';addArea.appendChild(note);
+  }
+}
+
 /* ── WEEK MANAGEMENT ── */
 function addWeek(){
-  const idx=state.weeks.length?Math.max(...state.weeks.map(w=>w.idx))+1:1;
-  state.weeks.push(makeWeek(idx));
-  if(!state.openWeeks.includes(idx))state.openWeeks.push(idx);
+  const lang=cL();
+  const idx=lang.weeks.length?Math.max(...lang.weeks.map(w=>w.idx))+1:1;
+  lang.weeks.push(makeWeek(idx));
+  if(!lang.openWeeks.includes(idx))lang.openWeeks.push(idx);
   save(state);renderSidebar();
 }
 function toggleWeek(idx){
-  const i=state.openWeeks.indexOf(idx);
-  if(i>=0)state.openWeeks.splice(i,1);else state.openWeeks.push(idx);
+  const lang=cL();
+  const i=lang.openWeeks.indexOf(idx);
+  if(i>=0)lang.openWeeks.splice(i,1);else lang.openWeeks.push(idx);
   save(state);renderSidebar();
 }
 function confirmDel(idx){pendingDel=idx;renderSidebar()}
 function cancelDel(){pendingDel=null;renderSidebar()}
 function doDelete(idx){
-  state.weeks=state.weeks.filter(w=>w.idx!==idx);
-  state.openWeeks=state.openWeeks.filter(i=>i!==idx);
-  if(state.curWeek===idx&&state.weeks.length){state.curWeek=state.weeks[0].idx;state.curDay=1}
+  const lang=cL();
+  lang.weeks=lang.weeks.filter(w=>w.idx!==idx);
+  lang.openWeeks=lang.openWeeks.filter(i=>i!==idx);
+  if(lang.curWeek===idx&&lang.weeks.length){lang.curWeek=lang.weeks[0].idx;lang.curDay=1}
   pendingDel=null;save(state);
-  if(curView==='day')showDay(state.curWeek,state.curDay);
+  if(curView==='day')showDay(lang.curWeek,lang.curDay);
   renderSidebar();
 }
 
@@ -322,15 +710,18 @@ function setupSwipe(el,idx){
 
 /* ── RENDER ── */
 function render(){
-  document.getElementById('streak').textContent='🔥 '+state.streak+' days';
+  const lang=cL();
+  document.getElementById('streak').textContent='🔥 '+lang.streak+' days';
+  renderLangSwitcher();
   renderSidebar();
-  if(curView==='all')showAll();else showDay(state.curWeek,state.curDay);
+  if(curView==='all')showAll();else showDay(lang.curWeek,lang.curDay);
 }
 
 function renderSidebar(){
+  const lang=cL();
   const wl=document.getElementById('week-list');wl.innerHTML='';
-  state.weeks.forEach(week=>{
-    const wi=week.idx,open=state.openWeeks.includes(wi),isPend=pendingDel===wi;
+  lang.weeks.forEach(week=>{
+    const wi=week.idx,open=lang.openWeeks.includes(wi),isPend=pendingDel===wi;
     const block=document.createElement('div');block.className='week-block';
     const sw=document.createElement('div');sw.className='week-swipe-wrap';
     const bg=document.createElement('div');bg.className='week-delete-bg';bg.textContent='Delete';
@@ -351,9 +742,9 @@ function renderSidebar(){
     const dd=document.createElement('div');dd.className='week-days '+(open?'expanded':'collapsed');
     for(let d=1;d<=7;d++){
       const b=document.createElement('button');
-      b.className='day-btn'+(state.curWeek===wi&&state.curDay===d&&curView==='day'?' active':'');
+      b.className='day-btn'+(lang.curWeek===wi&&lang.curDay===d&&curView==='day'?' active':'');
       b.innerHTML=`<span style="font-size:13px">${DAY_ICO[d]}</span> Day ${d}`;
-      b.addEventListener('click',(()=>{const ww=wi,dd2=d;return()=>{curView='day';document.getElementById('btn-all').classList.remove('active');state.curWeek=ww;state.curDay=dd2;save(state);closeDrawer();renderSidebar();showDay(ww,dd2)}})());
+      b.addEventListener('click',(()=>{const ww=wi,dd2=d;return()=>{curView='day';document.getElementById('btn-all').classList.remove('active');lang.curWeek=ww;lang.curDay=dd2;save(state);closeDrawer();renderSidebar();showDay(ww,dd2)}})());
       dd.appendChild(b);
     }
     block.appendChild(dd);wl.appendChild(block);setupSwipe(hdr,wi);
@@ -372,37 +763,41 @@ function setGame(){
 
 /* ── ALL WORDS ── */
 function showAll(){
+  const lang=cL();
   curView='all';
   document.getElementById('btn-all').classList.add('active');
-  document.getElementById('day-label').textContent='All Words';
+  document.getElementById('day-label').textContent=`📋 ${lang.name} · All Words`;
   setScrollable();
   const c=document.getElementById('content');c.innerHTML='';
-  const title=document.createElement('div');title.className='sec-title';title.textContent='📋 All Words';c.appendChild(title);
+  const title=document.createElement('div');title.className='sec-title';
+  title.innerHTML=`📋 All Words <span style="font-size:11px;background:var(--g4);color:#fff;border-radius:20px;padding:2px 10px;font-weight:700">${lang.name}</span>`;
+  c.appendChild(title);
   const bar=document.createElement('div');bar.className='wf-bar';
   const allBtn=document.createElement('button');allBtn.className='wf-btn'+(allFilter==='all'?' active':'');allBtn.textContent='All';
   allBtn.addEventListener('click',()=>setFilter('all'));bar.appendChild(allBtn);
-  state.weeks.forEach(w=>{
+  lang.weeks.forEach(w=>{
     const wb=document.createElement('button');wb.className='wf-btn'+(allFilter===w.idx?' active':'');wb.textContent=`Week ${w.idx}`;
     wb.addEventListener('click',()=>setFilter(w.idx));bar.appendChild(wb);
   });
   c.appendChild(bar);
-  const all=[];state.weeks.forEach(w=>{for(let d=1;d<=5;d++)(w.days[d]||[]).forEach(x=>all.push({...x,week:w.idx,day:d}))});
+  const all=[];lang.weeks.forEach(w=>{for(let d=1;d<=5;d++)(w.days[d]||[]).forEach(x=>all.push({...x,week:w.idx,day:d}))});
   const fil=allFilter==='all'?all:all.filter(x=>x.week===allFilter);
   if(!fil.length){const m=document.createElement('p');m.className='msg';m.textContent='No words saved yet.';c.appendChild(m);return}
   const tbl=document.createElement('table');tbl.className='vtable';
   tbl.innerHTML='<thead><tr><th>Word</th><th>Meaning</th><th>Week</th><th>Day</th><th>Errors</th></tr></thead>';
   const tbody=document.createElement('tbody');
-  fil.forEach(w=>{const wk=state.weeks.find(x=>x.idx===w.week);const wc=wk?wk.wrongCounts[w.word]||0:0;const tr=document.createElement('tr');tr.innerHTML=`<td>${w.word}</td><td>${w.meaning}</td><td><span class="pill">W${w.week}</span></td><td><span class="pill">D${w.day}</span></td><td>${wc>0?'❌'.repeat(Math.min(wc,3)):'-'}</td>`;tbody.appendChild(tr)});
+  fil.forEach(w=>{const wk=lang.weeks.find(x=>x.idx===w.week);const wc=wk?wk.wrongCounts[w.word]||0:0;const tr=document.createElement('tr');tr.innerHTML=`<td>${w.word}</td><td>${w.meaning}</td><td><span class="pill">W${w.week}</span></td><td><span class="pill">D${w.day}</span></td><td>${wc>0?'❌'.repeat(Math.min(wc,3)):'-'}</td>`;tbody.appendChild(tr)});
   tbl.appendChild(tbody);c.appendChild(tbl);
 }
 function setFilter(v){allFilter=v;showAll()}
+function getWeek(idx){return cL().weeks.find(w=>w.idx===idx)}
 
 /* ── SHOW DAY ── */
-function getWeek(idx){return state.weeks.find(w=>w.idx===idx)}
 function showDay(wIdx,d){
-  if(!wIdx||!getWeek(wIdx)){if(state.weeks.length){wIdx=state.weeks[0].idx;d=1}else{setScrollable();document.getElementById('content').innerHTML='<p class="msg">Add a week to get started!</p>';return}}
-  state.curWeek=wIdx;state.curDay=d;save(state);
-  document.getElementById('day-label').textContent=`Week ${wIdx} · Day ${d}`+(d<=5?' · Input':d===6?' · Review':' · Hard');
+  const lang=cL();
+  if(!wIdx||!getWeek(wIdx)){if(lang.weeks.length){wIdx=lang.weeks[0].idx;d=1}else{setScrollable();document.getElementById('content').innerHTML='<p class="msg">Add a week to get started!</p>';return}}
+  lang.curWeek=wIdx;lang.curDay=d;save(state);
+  document.getElementById('day-label').textContent=`${lang.name} · Week ${wIdx} · Day ${d}`+(d<=5?' · Input':d===6?' · Review':' · Hard');
   setScrollable();
   const week=getWeek(wIdx);if(!week)return;
   if(d<=5)renderInputDay(week,d);else if(d===6)renderSummaryDay(week);else renderHardDay(week);
@@ -431,6 +826,11 @@ function renderInputDay(week,d){
   iw.addEventListener('keydown',e=>{if(e.key==='Enter')im.focus()});
   im.addEventListener('keydown',e=>{if(e.key==='Enter')addWord(week.idx,d)});
   row.appendChild(iw);row.appendChild(im);row.appendChild(addBtn);c.appendChild(row);
+  const bulkBtn=document.createElement('button');bulkBtn.className='btn-bulk-open';
+  bulkBtn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="2.5" rx="1.25" fill="var(--g4)"/><rect x="1" y="5.75" width="12" height="2.5" rx="1.25" fill="var(--g4)"/><rect x="1" y="10.5" width="8" height="2.5" rx="1.25" fill="var(--g4)"/></svg> Bulk Add';
+  bulkBtn.style.marginBottom='12px';
+  bulkBtn.addEventListener('click',()=>openBulk(week.idx,d));
+  c.appendChild(bulkBtn);
   const wl=document.createElement('div');wl.className='word-list';wl.id='wlist';c.appendChild(wl);
   const btnWrap=document.createElement('div');btnWrap.style.textAlign='center';btnWrap.style.paddingBottom='12px';
   const startBtn=document.createElement('button');startBtn.className='btn-start';startBtn.id='btn-game';startBtn.textContent='▶ Start Matching';startBtn.disabled=pool.length<2;
@@ -611,6 +1011,192 @@ function playPage(wIdx,pairs,day,pageIdx,totalPages,isRetry,onDone){
   renderGame();
 }
 
+/* ── BULK IMPORT ── */
+function parseBulkText(raw){
+  const results=[];
+  raw.split('\n').forEach(line=>{
+    const l=line.trim();if(!l)return;
+    let word='',meaning='';
+    if(l.includes('\t')){
+      const p=l.split('\t');word=p[0].trim();meaning=p.slice(1).join('\t').trim();
+    }else if(/^(.+?)\s*[:\/—–]\s*(.+)$/.test(l)){
+      const m=l.match(/^(.+?)\s*[:\/—–]\s*(.+)$/);word=m[1].trim();meaning=m[2].trim();
+    }else if(/^(.+?)\s+-\s+(.+)$/.test(l)){
+      const m=l.match(/^(.+?)\s+-\s+(.+)$/);word=m[1].trim();meaning=m[2].trim();
+    }else if(/^([A-Za-z][A-Za-z0-9 ''\-]*?)\s+([\uAC00-\uD7A3\u3040-\u30FF\u4E00-\u9FFF].*)$/.test(l)){
+      const m=l.match(/^([A-Za-z][A-Za-z0-9 ''\-]*?)\s+([\uAC00-\uD7A3\u3040-\u30FF\u4E00-\u9FFF].*)$/);word=m[1].trim();meaning=m[2].trim();
+    }else if(/^([\uAC00-\uD7A3\u3040-\u30FF\u4E00-\u9FFF]\S*(?:\s+\S+)*?)\s+([A-Za-z].*)$/.test(l)){
+      const m=l.match(/^([\uAC00-\uD7A3\u3040-\u30FF\u4E00-\u9FFF]\S*(?:\s+\S+)*?)\s+([A-Za-z].*)$/);word=m[1].trim();meaning=m[2].trim();
+    }else{
+      const sp=l.indexOf(' ');
+      if(sp>0){word=l.slice(0,sp).trim();meaning=l.slice(sp+1).trim();}
+      else{word=l;meaning='';}
+    }
+    if(word&&meaning)results.push({word,meaning,ok:true});
+    else if(word)results.push({word,meaning:'',ok:false,raw:l});
+  });
+  return results;
+}
+
+let _bWIdx=null,_bD=null;
+
+function openBulk(wIdx,d){
+  _bWIdx=wIdx;_bD=d;
+  const ta=document.getElementById('bulk-ta');
+  ta.value='';
+  document.getElementById('bulk-preview').innerHTML='';
+  document.getElementById('bulk-count').textContent='';
+  document.getElementById('bulk-add-btn').disabled=true;
+  document.getElementById('bulk-overlay').style.display='flex';
+  setTimeout(()=>ta.focus(),120);
+}
+
+function closeBulk(){
+  document.getElementById('bulk-overlay').style.display='none';
+  _bWIdx=null;_bD=null;
+}
+
+function updateBulkPreview(){
+  const parsed=parseBulkText(document.getElementById('bulk-ta').value);
+  const ok=parsed.filter(p=>p.ok);
+  const preview=document.getElementById('bulk-preview');
+  const count=document.getElementById('bulk-count');
+  const addBtn=document.getElementById('bulk-add-btn');
+  if(!parsed.length){preview.innerHTML='';count.textContent='';addBtn.disabled=true;return}
+  count.textContent=`${ok.length} word${ok.length!==1?'s':''} ready${parsed.length>ok.length?' · '+(parsed.length-ok.length)+' skipped':''}`;
+  preview.innerHTML='';
+  parsed.slice(0,6).forEach(p=>{
+    const row=document.createElement('div');row.className='bulk-row'+(p.ok?'':' err');
+    if(p.ok){
+      row.innerHTML=`<span class="bw">${p.word}</span><span class="bs">→</span><span class="bm">${p.meaning}</span>`;
+    }else{
+      row.textContent=`⚠ "${p.raw}" — no meaning found`;
+    }
+    preview.appendChild(row);
+  });
+  if(parsed.length>6){const more=document.createElement('div');more.style.cssText='font-size:11px;color:var(--g4);padding:2px 12px;font-weight:600';more.textContent=`+${parsed.length-6} more...`;preview.appendChild(more)}
+  addBtn.disabled=ok.length===0;
+}
+
+function commitBulk(){
+  if(_bWIdx===null||_bD===null)return;
+  const parsed=parseBulkText(document.getElementById('bulk-ta').value).filter(p=>p.ok);
+  if(!parsed.length){closeBulk();return}
+  const wIdx=_bWIdx,d=_bD;
+  const week=getWeek(wIdx);
+  if(!week){closeBulk();return}
+  parsed.forEach(p=>week.days[d].push({word:p.word,meaning:p.meaning}));
+  save(state);
+  document.getElementById('bulk-overlay').style.display='none';
+  _bWIdx=null;_bD=null;
+  renderWordList(week,d);
+}
+
+/* ── SYNC ── */
+function compressPayload(obj){
+  return JSON.stringify(obj)
+    .replace(/"weeks":/g,'"W":').replace(/"days":/g,'"D":')
+    .replace(/"wrongCounts":/g,'"E":').replace(/"word":/g,'"w":')
+    .replace(/"meaning":/g,'"m":').replace(/"streak":/g,'"S":')
+    .replace(/"lastDate":/g,'"L":').replace(/"_delta":/g,'"d":')
+    .replace(/"_days":/g,'"dd":').replace(/"_multiLang":/g,'"ML":')
+    .replace(/"exportedAt":/g,'"eA":').replace(/"langs":/g,'"lg":')
+    .replace(/"delta":/g,'"dt":').replace(/"name":/g,'"n":')
+    .replace(/"color":/g,'"c":').replace(/"idx":/g,'"i":')
+    .replace(/"openWeeks":/g,'"oW":').replace(/"curWeek":/g,'"cW":')
+    .replace(/"curDay":/g,'"cD":');
+}
+function decompressPayload(json){
+  return json
+    .replace(/"W":/g,'"weeks":').replace(/"D":/g,'"days":')
+    .replace(/"E":/g,'"wrongCounts":').replace(/"w":/g,'"word":')
+    .replace(/"m":/g,'"meaning":').replace(/"S":/g,'"streak":')
+    .replace(/"L":/g,'"lastDate":').replace(/"d":/g,'"_delta":')
+    .replace(/"dd":/g,'"_days":').replace(/"ML":/g,'"_multiLang":')
+    .replace(/"eA":/g,'"exportedAt":').replace(/"lg":/g,'"langs":')
+    .replace(/"dt":/g,'"delta":').replace(/"n":/g,'"name":')
+    .replace(/"c":/g,'"color":').replace(/"i":/g,'"idx":')
+    .replace(/"oW":/g,'"openWeeks":').replace(/"cW":/g,'"curWeek":')
+    .replace(/"cD":/g,'"curDay":');
+}
+function encodeData(obj){
+  return btoa(unescape(encodeURIComponent(compressPayload(obj))));
+}
+function decodeData(str){
+  try{
+    const compressed=decodeURIComponent(escape(atob(str.trim())));
+    const json=compressed.includes('"W":')
+      ?decompressPayload(compressed):compressed;
+    return JSON.parse(json);
+  }catch{return null}
+}
+
+function buildDeltaPayload(lang,days=3){
+  const today=new Date();
+  const cycleStart=lang.cycleStart||lang.lastDate||today.toISOString().slice(0,10);
+  const cycleStartMs=new Date(cycleStart).getTime();
+  const recentDayNums=new Set();
+  for(let i=0;i<days;i++){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const diffDays=Math.floor((d.getTime()-cycleStartMs)/86400000);
+    const dayNum=(diffDays%7)+1;
+    if(dayNum>=1&&dayNum<=7)recentDayNums.add(dayNum);
+  }
+  const deltaWeeks=(lang.weeks||[]).map(week=>{
+    const deltaDays={};
+    recentDayNums.forEach(d=>{const words=week.days[d]||[];if(words.length>0)deltaDays[d]=words});
+    if(Object.keys(deltaDays).length===0)return null;
+    return{idx:week.idx,days:deltaDays,wrongCounts:week.wrongCounts||{}};
+  }).filter(Boolean);
+  return{_delta:true,_days:days,weeks:deltaWeeks,streak:lang.streak||0,lastDate:lang.lastDate||null};
+}
+
+function mergeDelta(base,delta){
+  const result=JSON.parse(JSON.stringify(base));
+  delta.weeks.forEach(dWeek=>{
+    const existing=result.weeks.find(w=>w.idx===dWeek.idx);
+    if(existing){
+      Object.keys(dWeek.days).forEach(d=>{existing.days[d]=dWeek.days[d]});
+      Object.keys(dWeek.wrongCounts||{}).forEach(word=>{
+        existing.wrongCounts[word]=Math.max(existing.wrongCounts[word]||0,dWeek.wrongCounts[word]||0);
+      });
+    }else{
+      const fullDays={};for(let d=1;d<=7;d++)fullDays[d]=dWeek.days[d]||[];
+      result.weeks.push({idx:dWeek.idx,days:fullDays,wrongCounts:dWeek.wrongCounts||{}});
+    }
+  });
+  if(delta.lastDate&&delta.lastDate>=(result.lastDate||'')){
+    result.streak=delta.streak;result.lastDate=delta.lastDate;
+  }
+  return result;
+}
+
+let _syncExportCode='';
+
+function openSync(){
+  const langDeltas=state.langs.map(lang=>{
+    const delta=buildDeltaPayload(lang,3);
+    return{id:lang.id,name:lang.name,delta};
+  });
+  const payload={_multiLang:true,_delta:true,_days:3,langs:langDeltas,exportedAt:todayStr()};
+  _syncExportCode=encodeData(payload);
+  document.getElementById('sync-export-box').textContent=_syncExportCode;
+  let totalWords=0;
+  langDeltas.forEach(l=>l.delta.weeks.forEach(w=>Object.values(w.days).forEach(arr=>totalWords+=arr.length)));
+  const fullSize=encodeData({langs:state.langs}).length;
+  const deltaSize=_syncExportCode.length;
+  const saving=fullSize>deltaSize?Math.round((1-deltaSize/fullSize)*100):0;
+  document.getElementById('sync-size-hint').textContent=
+    `${state.langs.length}개 언어 · 최근 3일 · ${totalWords}개 단어 · ${deltaSize}자${saving>0?' (전체 대비 '+saving+'% 절약)':''}`;
+  document.getElementById('sync-import-ta').value='';
+  document.getElementById('sync-import-btn').disabled=true;
+  const btn=document.getElementById('sync-copy-btn');
+  btn.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3 11V3a2 2 0 0 1 2-2h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg> 전체 복사';
+  btn.classList.remove('copied');
+  document.getElementById('sync-overlay').style.display='flex';
+}
+function closeSync(){document.getElementById('sync-overlay').style.display='none';}
+
 /* ── BOOT ── */
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('menu-btn').addEventListener('click',toggleDrawer);
@@ -618,6 +1204,98 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('btn-all').addEventListener('click',function(){showAll();closeDrawer()});
   document.getElementById('add-week-btn').addEventListener('click',addWeek);
   document.getElementById('how-to-btn').addEventListener('click',function(){openOnboarding();closeDrawer()});
+  document.getElementById('sync-drawer-btn').addEventListener('click',function(){openSync();closeDrawer()});
+
+  document.getElementById('bulk-ta').addEventListener('input',updateBulkPreview);
+  document.getElementById('bulk-cancel-btn').addEventListener('click',closeBulk);
+  document.getElementById('bulk-add-btn').addEventListener('click',commitBulk);
+  document.getElementById('bulk-overlay').addEventListener('click',function(e){if(e.target===this)closeBulk()});
+
+  document.getElementById('sync-close-btn').addEventListener('click',closeSync);
+  document.getElementById('sync-overlay').addEventListener('click',function(e){if(e.target===this)closeSync()});
+
+  document.getElementById('sync-copy-btn').addEventListener('click',function(){
+    const btn=this;
+    function onSuccess(){
+      btn.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 복사됨!';
+      btn.classList.add('copied');
+      setTimeout(()=>{
+        btn.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3 11V3a2 2 0 0 1 2-2h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg> 전체 복사';
+        btn.classList.remove('copied');
+      },2200);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(_syncExportCode).then(onSuccess).catch(()=>fallbackCopy(btn));
+    }else{fallbackCopy(btn)}
+  });
+
+  function fallbackCopy(btn){
+    const ta=document.createElement('textarea');
+    ta.value=_syncExportCode;ta.style.cssText='position:fixed;top:-9999px;opacity:0';
+    document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,99999);
+    try{
+      document.execCommand('copy');
+      btn.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 복사됨!';
+      btn.classList.add('copied');
+      setTimeout(()=>{
+        btn.innerHTML='<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3 11V3a2 2 0 0 1 2-2h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg> 전체 복사';
+        btn.classList.remove('copied');
+      },2200);
+    }catch{alert('복사에 실패했습니다. 코드를 직접 선택해서 복사해주세요.')}
+    document.body.removeChild(ta);
+  }
+
+  document.getElementById('sync-import-ta').addEventListener('input',function(){
+    const v=this.value.trim();
+    const btn=document.getElementById('sync-import-btn');
+    if(!v){btn.disabled=true;return}
+    const decoded=decodeData(v);
+    if(decoded&&(decoded.langs||decoded.weeks)){btn.disabled=false;return}
+    try{const p=JSON.parse(v);btn.disabled=!(p&&(p.langs||p.weeks));}
+    catch{btn.disabled=true;}
+  });
+
+  document.getElementById('sync-import-btn').addEventListener('click',function(){
+    const raw=document.getElementById('sync-import-ta').value.trim();
+    let parsed=decodeData(raw);
+    if(!parsed){try{parsed=JSON.parse(raw)}catch{parsed=null}}
+    if(!parsed){alert('유효하지 않은 코드입니다.');return}
+    if(parsed._multiLang&&parsed.langs){
+      // 멀티언어 delta 병합
+      parsed.langs.forEach(incoming=>{
+        const existing=state.langs.find(l=>l.id===incoming.id);
+        if(existing){
+          const merged=mergeDelta(existing,incoming.delta);
+          Object.assign(existing,{weeks:merged.weeks,streak:merged.streak,lastDate:merged.lastDate});
+        }else if(state.langs.length<3){
+          const newLang=makeLang(incoming.id,incoming.name);
+          const merged=mergeDelta(newLang,incoming.delta);
+          newLang.weeks=merged.weeks;newLang.streak=merged.streak;newLang.lastDate=merged.lastDate;
+          state.langs.push(newLang);
+        }
+      });
+      state.seenOnboarding=true;
+      try{localStorage.setItem(SK,JSON.stringify(state));location.reload();}
+      catch(e){alert('저장 중 오류: '+e.message)}
+    }else if(parsed.weeks){
+      // 구버전 단일언어 → 현재 언어에 병합
+      if(parsed._delta){
+        const merged=mergeDelta(cL(),parsed);
+        Object.assign(cL(),{weeks:merged.weeks,streak:merged.streak,lastDate:merged.lastDate});
+      }else{
+        cL().weeks=parsed.weeks||cL().weeks;
+        if(parsed.streak)cL().streak=parsed.streak;
+        if(parsed.lastDate)cL().lastDate=parsed.lastDate;
+      }
+      state.seenOnboarding=true;
+      try{localStorage.setItem(SK,JSON.stringify(state));location.reload();}
+      catch(e){alert('저장 중 오류: '+e.message)}
+    }else{alert('유효하지 않은 형식입니다.');}
+  });
+
+  document.getElementById('lang-modal-close-btn').addEventListener('click',closeLangModal);
+  document.getElementById('lang-modal-overlay').addEventListener('click',function(e){if(e.target===this)closeLangModal();});
+
   initCycle();
 });
 </script>
